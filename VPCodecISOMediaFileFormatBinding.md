@@ -116,9 +116,9 @@ aligned (8) class VPCodecConfigurationRecord {
     unsigned int (8)     profile;
     unsigned int (8)     level;
     unsigned int (4)     bitDepth;
-    unsigned int (4)     colorSpace;
-    unsigned int (4)     chromaSubsampling;
-    unsigned int (3)     transferFunction;
+    unsigned int (8)     matrixCoefficients;
+    unsigned int (3)     chromaSubsampling;
+    unsigned int (8)     transferCharacteristics;
     unsigned int (1)     videoFullRangeFlag;
     unsigned int (16)    codecIntializationDataSize;
     unsigned int (8)[]   codecIntializationData;
@@ -138,26 +138,12 @@ to. The value is 0 if a codec level is not specified.
 **bitDepth** is an integer that specifies the bit depth of the luma and color
 components. Valid values are 8, 10, 12.
 
-**colorSpace** is an integer that specifies the color space of the video,
-enumerated in the following table:
-
-
-| Value | Color Space
-|:-----:|:-----------:
-| 0     | Unspecified
-| 1     | Rec. ITU-R BT.601-7
-| 2     | Rec. ITU-R BT.709-6
-| 3     | SMPTE-­170
-| 4     | SMPTE­-240
-| 5     | Rec. ITU-R BT.2020 non-constant luminance
-| 6     | Rec. ITU-R BT. 2020 constant luminance
-| 7     | IEC 61966-2-1 (sRGB)
-| 8..15 | Reserved
-
+**matrixCoefficients** is an integer that is defined by the "Matrix coefficients"
+section of ISO/IEC 23001-8:2016.
 
 **chromaSubsampling** is an integer that specifies the chroma subsampling.
-Only the values in the following table are specified. If colorspace is 4
-(RGB), then chroma subsampling must be 4 (4:4:4).
+Only the values in the following table are specified. If matrixCoefficients is 0
+(RGB), then chroma subsampling must be 3 (4:4:4).
 
 
 | Value | Subsampling
@@ -166,7 +152,7 @@ Only the values in the following table are specified. If colorspace is 4
 | 1     | 4:2:0 collocated with luma (0,0)
 | 2     | 4:2:2
 | 3     | 4:4:4
-| 4..15 | Reserved
+| 4..7  | Reserved
 
 
 <img alt="Figure #1" src="images/image00.png" style="margin: 3em auto 1em auto; display: block;">
@@ -176,16 +162,8 @@ Only the values in the following table are specified. If colorspace is 4
 <p style="text-align: center;">Figure 2: 4:2:0 chroma subsampling collocated with (0,0) luma</p>
 
 
-**transferFunction** is an integer that specifies the transfer function. Only
-the values in the following table are specified.
-
-
-| Value | Transfer Function
-|:-----:|:-----------------:
-| 0     | Rec. ITU-R BT.709-6, Rec. ITU-R BT.601-7 525 or 625, Rec. ITU-R BT.2020.
-| 1     | SMPTE ST 2084:2014
-| 2     | BT.2100 Hybrid Log-Gamma (HLG)
-| 3..7  | Reserved
+**transferCharacteristics** is an integer that is defined by the "Transfer characteristics"
+section of ISO/IEC 23001-8:2016.
 
 **videoFullRangeFlag** indicates the black level and range of the luma and
 chroma signals. 0 = legal range (e.g. 16-235 for 8 bit sample depth) 1 = full
@@ -253,15 +231,15 @@ specified in RFC-6381 for ISO Media tracks. A Suggested codecs parameter of VP
 codecs is:
 
 ~~~~~
-<sample entry 4CC>.<profile>.<level>.<bitDepth>.<colorSpace>.<chromaSubsampling>.<transferFunction>.<videoFullRangeFlag>
+<sample entry 4CC>.<profile>.<level>.<bitDepth>.<matrixCoefficients>.<chromaSubsampling>.<transferCharacteristics>.<videoFullRangeFlag>
 ~~~~~
 
 Numbers are expressed in decimal. The string may be truncated on any parameter
 in sequence following the sample entry, and missing values are indicated by a
 sequence of two periods with no parameter value between them.
 
-For example, `codecs="vp09.01.01.02.01.01.00"` to indicate 10 bit 4:2:0 Rec.
-ITU-R BT.2020 video encoded using VP9 profile 1 and level 1, 4:2:0 colocated
+For example, `codecs="vp09.02.01.10.09.16.00"` to indicate 10 bit 4:2:0 Rec.
+ITU-R BT.2020 non-constant luminance video encoded using VP9 profile 2 and level 1, 4:2:0 colocated
 subsampling, st02-84 EOTF, and `codecs="vp09"` to indicate only the codec and
  sample format.
 
