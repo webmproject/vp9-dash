@@ -376,8 +376,8 @@ specified in RFC-6381 for ISO Media tracks. The codecs string for VP is as
 follows:  
 
 ~~~~~
-<sample entry 4CC>.<profile>.<level>.<bitDepth>.<colorSpace>.<chromaSubsampling>.
-<transferFunction>.<videoFullRangeFlag>
+<sample entry 4CC>.<profile>.<level>.<bitDepth>.<matrixCoefficients>.<chromaSubsampling>.
+<transferCharacteristics>.<videoFullRangeFlag>
 ~~~~~
 
 Numbers are expressed as double-digit decimals, and all fields are required.
@@ -387,7 +387,13 @@ omitted. For whole numbers, the decimal part is omitted. Eg. Level 1 is encoded
 as "01", level 1.2 is encoded as "12". Valid values for **level** may be found  
 **[here](https://www.webmproject.org/vp9/levels/)**.  
 
-For example, `codecs="vp09.02.01.10.05.01.01"` represents 10 bit 4:2:0 Rec.  
+**matrixCoefficients** is an integer that is defined by the "Matrix coefficients"  
+section of ISO/IEC 23001-8:2016.  
+
+**transferCharacteristics** is an integer that is defined by the  
+"Transfer characteristics" section of ISO/IEC 23001-8:2016.  
+
+For example, `codecs="vp09.02.01.10.09.01.16"` represents 10 bit 4:2:0 Rec.  
 ITU-R BT.2020 non-constant luminance video encoded using VP9 profile 2  
 and level 1, 4:2:0 colocated subsampling, st-2084 EOTF.  
 
