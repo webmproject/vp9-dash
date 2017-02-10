@@ -1,12 +1,13 @@
 
-Draft: VP Codec ISO Media File Format Binding
-=============================================
+VP Codec ISO Media File Format Binding
+======================================
+
+2017.01.26 Draft
 
 _Kilroy Hughes, Microsoft  
 David Ronca, Netflix  
 Frank Galligan, Google  
 Thomas Inskip, Google_
-
 
 
 Introduction
@@ -17,27 +18,42 @@ video encoded with Video Partition structured video codecs ("VP"), such as
 MPEG VCB (MPEG-4 Part 31), VP8, VP9, etc.  
 
 
-
 Normative References
 --------------------
 
   * ISO/IEC 14496‐12, Information technology -- Coding of audio-visual objects  
-    -- Part 12: ISO base media file format
+    -- Part 12: ISO base media file format  
 
   * ISO/IEC 23001-7 second edition 2015-0401, Part 7:  Information technology  
     -- MPEG systems technologies -- Common encryption in ISO base media file  
     format files  
 
-  * VP9 Bitstream and Decoding Process
+  * SMPTE ST 2086:2014, Mastering Display Color Volume Metadata Supporting High  
+    Luminance and Wide Color Gamut Images  
+
+  * VP9 Bitstream and Decoding Process  
 
 
-VP Codec Sample Entry Box
--------------------------
+Data Types and Fields
+---------------------
 
-This section describes the sample entry and sample format for VP elementary
-streams.
+Fixed-point numbers are signed or unsigned values resulting from dividing an  
+integer by an appropriate power of 2. For example, a 0.16 fixed-point number is  
+formed by dividing a 16-bit integer by 2^16.  
 
-### Definition
+
+Basic Encapsulation Scheme
+--------------------------
+
+This section describes the basic data structures used to signal encapsulation of  
+VP encoded video in ISO-BMFF containers.
+
+### VP Codec Sample Entry Box
+
+The VP Codec Sample Entry box describes the sample entry and sample format for  
+VP elementary streams.  
+
+#### Definition
 
 |           |                                                 |
 | --------- | ------------------------------------------------|
@@ -54,7 +70,7 @@ generate a box instance identified by the 4CC of the specific codec used.
 The 4CC codes currently defined by this spec are 'vp08', 'vp09', 'vp10'.  
 
 
-### Syntax
+#### Syntax
 
 ~~~~~
 class VP8SampleEntry extends VisualSampleEntry('vp08') {
@@ -71,7 +87,7 @@ class VP10SampleEntry extends VisualSampleEntry('vp10') {
 ~~~~~
 
 
-### Semantics
+#### Semantics
 
 **compressorname** is a name, for informative purposes. It is formatted in a  
 fixed 32-byte field, with the first byte set to the number of bytes to be  
@@ -84,10 +100,9 @@ count of the remaining bytes, here represented by \012, which (being octal
 **config** is defined in the following section.  
 
 
-VP Codec Configuration Box
---------------------------
+### VP Codec Configuration Box
 
-### Definition
+#### Definition
 
 |           |                                   |
 | --------- | ----------------------------------|
@@ -97,7 +112,7 @@ VP Codec Configuration Box
 | Quantity  | Exactly One|
 
 
-### Description
+#### Description
 
 The VP Codec Configuration Box is contained in every VP Codec Sample Entry  
 Box. It exposes the general video parameters in standard fields, useful for  
@@ -108,7 +123,7 @@ every sample that references the sample entry, and equal the parameter value
 unless otherwise noted.  
 
 
-### Syntax
+#### Syntax
 
 ~~~~~
 class VPCodecConfigurationBox extends FullBox('vpcC', version, 0){
@@ -116,7 +131,6 @@ class VPCodecConfigurationBox extends FullBox('vpcC', version, 0){
 }
 
 aligned (8) class VPCodecConfigurationRecord {
-
     unsigned int (8)     profile;
     unsigned int (8)     level;
     unsigned int (4)     bitDepth;
@@ -129,7 +143,7 @@ aligned (8) class VPCodecConfigurationRecord {
 }
 ~~~~~
 
-### Semantics
+#### Semantics
 
 **profile** is an integer that specifies the VP codec profile. The value of  
 profile must be valid for all samples that reference this sample entry, i.e.  
@@ -162,12 +176,12 @@ Only the values in the following table are specified. If colorspace is 4
 (RGB), then chroma subsampling must be 4 (4:4:4).
 
 | Value | Subsampling|
-|:-----:|:--------------------------------:|
-| 0     | 4:2:0 vertical|
-| 1     | 4:2:0 collocated with luma (0,0)|
-| 2     | 4:2:2|
-| 3     | 4:4:4|
-| 4..15 | Reserved|
+|:-----:|:---------------------------:|
+| 0 | 4:2:0 vertical|
+| 1 | 4:2:0 collocated with luma (0,0)|
+| 2 | 4:2:2|
+| 3 | 4:4:4|
+|4..15 | Reserved|
 
 
 <img alt="Figure #1" src="images/image00.png" style="margin: 3em auto 1em auto; display: block;">
@@ -211,8 +225,116 @@ using this specification if the VP8 stream includes ALTREF frames.
 <sup id="a1">[1](#f1)</sup>  
 
 
+Carriage of HDR Metadata
+------------------------
+
+This section specifies a model for carrying VP codec HDR metadata.  
+
+### SMPTE-2086 Mastering Display Metadata Box
+
+This box contains SMPTE-2086 Mastering Display Metadata information.  
+
+#### Definition
+
+|           |                                 |
+| --------- | --------------------------------|
+| Box Type  | 'SmDm'|
+| Container | Visual Sample Entry Box ('vpxx')|
+| Mandatory | No|
+| Quantity  | Exactly one|
+
+
+~~~~~
+class SMPTE2086MasteringDisplayMetadataBox extends Fullbox(‘SmDm’, 0, 0) {
+    uint16 primaryRChromaticity_x;
+    uint16 primaryRChromaticity_y;
+    uint16 primaryGChromaticity_x;
+    uint16 primaryGChromaticity_y;
+    uint16 primaryBChromaticity_x;
+    uint16 primaryBChromaticity_y;
+    uint16 whitePointChromaticity_x;
+    uint16 whitePointChromaticity_y;
+    uint32 luminanceMax;
+    uint32 luminanceMin;
+}
+~~~~~
+
+#### Semantics
+
+**primaryRChromaticity_x** a 0.16 fixed-point Red X chromaticity coordinate as  
+defined by CIE 1931  
+  
+**primaryRChromaticity_y** is a 0.16 fixed-point Red Y chromaticity coordinate  
+as defined by CIE 1931  
+  
+**primaryGChromaticity_x** is a 0.16 fixed-point Green X chromaticity coordinate  
+as defined by CIE 1931  
+  
+**primaryGChromaticity_y** is a 0.16 fixed-point Green Y chromaticity coordinate  
+as defined by CIE 1931  
+  
+**primaryBChromaticity_x** is a 0.16 fixed-point Blue X chromaticity coordinate  
+as defined by CIE 1931  
+  
+**primaryBChromaticity_y** is a 0.16 fixed-point Blue Y chromaticity coordinate  
+as defined by CIE 1931  
+  
+**whitePointChromaticity_x** is a 0.16 fixed-point White X chromaticity  
+coordinate as defined by CIE 1931  
+  
+**whitePointChromaticity_y** is a 0.16 fixed-point White Y chromaticity  
+coordinate as defined by CIE 1931  
+  
+**luminanceMax** is a 24.8 fixed point Maximum luminance, represented in  
+candelas per square meter (cd/m²)  
+  
+**luminanceMin** is a 18.14 fixed point Minimum luminance, represented in  
+candelas per square meter (cd/m²)  
+
+
+### Content Light Level Box 
+
+This box contains content light level information.
+
+#### Definition
+
+|           |                                 |
+| --------- | --------------------------------|
+| Box Type  | 'CoLL'|
+| Container | Visual Sample Entry Box ('vpxx')|
+| Mandatory | No|
+| Quantity  | Exactly one|
+
+The ‘coll’ box is used to provide the Maximum Content Light Level (maxCLL) and  
+Maximum Frame-Average Light Level (maxFALL), calculated as specified in  
+CEA-861.3, Appendix A. These values are coded as unsigned 16-bit integers. The  
+units for these fields are cd/m2 when the brightest pixel in the entire video  
+stream has the chromaticity of the white point of the encoding system used to  
+represent the video stream.  
+
+#### Syntax
+
+~~~~~
+class ContentLightLevelBox extends Fullbox(‘CoLL’, 0, 0) {
+    uint16 maxCLL;
+    uint16 maxFALL;
+}
+~~~~~
+
+#### Semantics
+
+**maxCLL** is a 16-bit integer that specifies the Maximum Content Light Level as  
+specified in CEA-861.3, Appendix A..  
+
+**maxFALL** is a 16-bit integer that specifies the Maximum Frame-Average Light  
+Level as specified in CEA-861.3, Appendix A.  
+
+
 Common Encryption
 -----------------
+
+This section specifies how to signal Common Encryption for VP video streams, as  
+well as VP sample partition into clear and encrypted subsamples.
 
 ### Scheme Info Box (sinf)
 
@@ -254,7 +376,8 @@ specified in RFC-6381 for ISO Media tracks. A Suggested codecs parameter of VP
 codecs is:  
 
 ~~~~~
-<sample entry 4CC>.<profile>.<level>.<bitDepth>.<colorSpace>.<chromaSubsampling>.<transferFunction>.<videoFullRangeFlag>
+<sample entry 4CC>.<profile>.<level>.<bitDepth>.<colorSpace>.<chromaSubsampling>.
+<transferFunction>.<videoFullRangeFlag>
 ~~~~~
 
 Numbers are expressed in decimal. The string may be truncated on any parameter  
