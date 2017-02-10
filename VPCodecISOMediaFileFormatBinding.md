@@ -387,9 +387,9 @@ omitted. For whole numbers, the decimal part is omitted. Eg. Level 1 is encoded
 as "01", level 1.2 is encoded as "12". Valid values for **level** may be found  
 **[here](https://www.webmproject.org/vp9/levels/)**.  
 
-For example, `codecs="vp09.01.01.02.01.01.00"` represents 10 bit 4:2:0 Rec.  
-ITU-R BT.2020 video encoded using VP9 profile 1 and level 1, 4:2:0 colocated  
-subsampling, st02-84 EOTF.  
+For example, `codecs="vp09.02.01.10.05.01.01"` represents 10 bit 4:2:0 Rec.  
+ITU-R BT.2020 non-constant luminance video encoded using VP9 profile 2  
+and level 1, 4:2:0 colocated subsampling, st-2084 EOTF.  
 
 * * *
 
