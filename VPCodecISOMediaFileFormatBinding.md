@@ -372,22 +372,24 @@ DASH Application
 ----------------
 
 DASH and other applications require defined values for the "codecs" parameter  
-specified in RFC-6381 for ISO Media tracks. A Suggested codecs parameter of VP  
-codecs is:  
+specified in RFC-6381 for ISO Media tracks. The codecs string for VP is as  
+follows:  
 
 ~~~~~
 <sample entry 4CC>.<profile>.<level>.<bitDepth>.<colorSpace>.<chromaSubsampling>.
 <transferFunction>.<videoFullRangeFlag>
 ~~~~~
 
-Numbers are expressed in decimal. The string may be truncated on any parameter  
-in sequence following the sample entry, and missing values are indicated by a  
-sequence of two periods with no parameter value between them.  
+Numbers are expressed as double-digit decimals, and all fields are required.
 
-For example, `codecs="vp09.01.01.02.01.01.00"` to indicate 10 bit 4:2:0 Rec.  
+The **level** parameter is encoded as floating point number (x.y) with the period  
+omitted. For whole numbers, the decimal part is omitted. Eg. Level 1 is encoded  
+as "01", level 1.2 is encoded as "12". Valid values for **level** may be found  
+**[here](https://www.webmproject.org/vp9/levels/)**.  
+
+For example, `codecs="vp09.01.01.02.01.01.00"` represents 10 bit 4:2:0 Rec.  
 ITU-R BT.2020 video encoded using VP9 profile 1 and level 1, 4:2:0 colocated  
-subsampling, st02-84 EOTF, and `codecs="vp09"` to indicate only the codec and  
- sample format.  
+subsampling, st02-84 EOTF.  
 
 * * *
 
