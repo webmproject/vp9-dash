@@ -126,7 +126,7 @@ unless otherwise noted.
 #### Syntax
 
 ~~~~~
-class VPCodecConfigurationBox extends FullBox('vpcC', version, 0){
+class VPCodecConfigurationBox extends FullBox('vpcC', version, 1){
       VPCodecConfigurationRecord() vpcConfig;
 }
 
