@@ -376,8 +376,8 @@ specified in RFC-6381 for ISO Media tracks. The codecs string for VP is as
 follows:  
 
 ~~~~~
-<sample entry 4CC>.<profile>.<level>.<bitDepth>.<matrixCoefficients>.<chromaSubsampling>.
-<transferCharacteristics>.<videoFullRangeFlag>.<colourPrimaries>
+<sample entry 4CC>.<profile>.<level>.<bitDepth>.<colourPrimaries>.
+<transferCharacteristics>.<matrixCoefficients>.<videoFullRangeFlag>.<chromaSubsampling>
 ~~~~~
 
 Numbers are expressed as double-digit decimals, and all fields are required.
@@ -396,7 +396,7 @@ section of ISO/IEC 23001-8:2016.
 **colourPrimaries** is an integer that is defined by the  
 "Colour primaries" section of ISO/IEC 23001-8:2016.  
 
-For example, `codecs="vp09.02.01.10.09.01.16.01.01"` represents 10 bit 4:2:0 Rec.  
+For example, `codecs="vp09.02.01.10.01.16.09.01.01"` represents 10 bit 4:2:0 Rec.  
 ITU-R BT.2020 non-constant luminance video encoded using VP9 profile 2  
 and level 1, 4:2:0 colocated subsampling, st-2084 EOTF, and ITU-R BT.709  
 primary.  
