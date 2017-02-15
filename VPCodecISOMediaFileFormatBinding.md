@@ -136,9 +136,9 @@ aligned (8) class VPCodecConfigurationRecord {
     unsigned int (4)     bitDepth;
     unsigned int (3)     chromaSubsampling;
     unsigned int (1)     videoFullRangeFlag;
-    unsigned int (8)     matrixCoefficients;
-    unsigned int (8)     transferCharacteristics;
     unsigned int (8)     colorPrimaries;
+    unsigned int (8)     transferCharacteristics;
+    unsigned int (8)     matrixCoefficients;
     unsigned int (16)    codecIntializationDataSize;
     unsigned int (8)[]   codecIntializationData;
 }
