@@ -396,10 +396,10 @@ section of ISO/IEC 23001-8:2016.
 **colourPrimaries** is an integer that is defined by the  
 "Colour primaries" section of ISO/IEC 23001-8:2016.  
 
-For example, `codecs="vp09.02.01.10.01.16.09.01.01"` represents 10 bit 4:2:0 Rec.  
-ITU-R BT.2020 non-constant luminance video encoded using VP9 profile 2  
-and level 1, 4:2:0 colocated subsampling, st-2084 EOTF, and ITU-R BT.709  
-primary.  
+For example, `codecs="vp09.02.01.10.09.16.09.01.01"` represents VP9 profile 2  
+YUV 4:2:0 10 bit content with ITU-R BT.2020 primaries, ST 2084 EOTF, and  
+ITU-R BT.2020 non-constant luminance color matrix, 4:2:0 colocated subsampling,  
+using full range.
 
 * * *
 
