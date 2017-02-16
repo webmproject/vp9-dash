@@ -136,8 +136,9 @@ aligned (8) class VPCodecConfigurationRecord {
     unsigned int (4)     bitDepth;
     unsigned int (3)     chromaSubsampling;
     unsigned int (1)     videoFullRangeFlag;
-    unsigned int (8)     matrixCoefficients;
+    unsigned int (8)     colorPrimaries;
     unsigned int (8)     transferCharacteristics;
+    unsigned int (8)     matrixCoefficients;
     unsigned int (16)    codecIntializationDataSize;
     unsigned int (8)[]   codecIntializationData;
 }
@@ -184,6 +185,9 @@ Only the values in the following table are specified. If matrixCoefficients is 0
 **videoFullRangeFlag** indicates the black level and range of the luma and  
 chroma signals. 0 = legal range (e.g. 16-235 for 8 bit sample depth) 1 = full  
  range (e.g. 0-255 for 8 bit sample depth).  
+
+**colorPrimaries** is an integer that is defined by the  
+"Colour primaries" section of ISO/IEC 23001-8:2016.  
 
 **codecIntializationDataSize** For VP8 and VP9 this field must be 0.  
 
