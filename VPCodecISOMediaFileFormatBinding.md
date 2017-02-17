@@ -2,8 +2,6 @@
 VP Codec ISO Media File Format Binding
 ======================================
 
-2017.01.26 Draft
-
 _Kilroy Hughes, Microsoft  
 David Ronca, Netflix  
 Frank Galligan, Google  
@@ -366,9 +364,8 @@ follows:
 Numbers are expressed as double-digit decimals, and all fields are required.
 
 The **level** parameter is encoded as floating point number (x.y) with the period  
-omitted. For whole numbers, the decimal part is omitted. Eg. Level 1 is encoded  
-as "10", level 1.2 is encoded as "12". Valid values for **level** may be found  
-**[here](https://www.webmproject.org/vp9/levels/)**.  
+omitted. Eg. Level 1 is encoded as "10", level 1.2 is encoded as "12". Valid values  
+for **level** may be found **[here](https://www.webmproject.org/vp9/levels/)**.  
 
 For example, `codecs="vp09.02.10.10.09.16.09.01.01"` represents VP9 profile 2,  
 level 1 YUV 4:2:0 10 bit content with ITU-R BT.2020 primaries, ST 2084 EOTF, and  
