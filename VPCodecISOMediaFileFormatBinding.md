@@ -136,7 +136,7 @@ aligned (8) class VPCodecConfigurationRecord {
     unsigned int (4)     bitDepth;
     unsigned int (3)     chromaSubsampling;
     unsigned int (1)     videoFullRangeFlag;
-    unsigned int (8)     colorPrimaries;
+    unsigned int (8)     colourPrimaries;
     unsigned int (8)     transferCharacteristics;
     unsigned int (8)     matrixCoefficients;
     unsigned int (16)    codecIntializationDataSize;
@@ -155,9 +155,6 @@ to. The value is 0 if a codec level is not specified.
 
 **bitDepth** is an integer that specifies the bit depth of the luma and color  
 components. Valid values are 8, 10, 12.
-
-**matrixCoefficients** is an integer that is defined by the "Matrix coefficients"  
-section of ISO/IEC 23001-8:2016.
 
 **chromaSubsampling** is an integer that specifies the chroma subsampling.  
 Only the values in the following table are specified. If matrixCoefficients is 0  
@@ -179,15 +176,18 @@ Only the values in the following table are specified. If matrixCoefficients is 0
 <p style="text-align: center;">Figure 2: 4:2:0 chroma subsampling collocated with (0,0) luma</p>
 
 
-**transferCharacteristics** is an integer that is defined by the  
-"Transfer characteristics" section of ISO/IEC 23001-8:2016.
-
 **videoFullRangeFlag** indicates the black level and range of the luma and  
 chroma signals. 0 = legal range (e.g. 16-235 for 8 bit sample depth) 1 = full  
  range (e.g. 0-255 for 8 bit sample depth).  
 
-**colorPrimaries** is an integer that is defined by the  
+**colourPrimaries** is an integer that is defined by the  
 "Colour primaries" section of ISO/IEC 23001-8:2016.  
+
+**transferCharacteristics** is an integer that is defined by the  
+"Transfer characteristics" section of ISO/IEC 23001-8:2016.  
+
+**matrixCoefficients** is an integer that is defined by the "Matrix coefficients"  
+section of ISO/IEC 23001-8:2016.  
 
 **codecIntializationDataSize** For VP8 and VP9 this field must be 0.  
 
@@ -367,20 +367,11 @@ Numbers are expressed as double-digit decimals, and all fields are required.
 
 The **level** parameter is encoded as floating point number (x.y) with the period  
 omitted. For whole numbers, the decimal part is omitted. Eg. Level 1 is encoded  
-as "01", level 1.2 is encoded as "12". Valid values for **level** may be found  
+as "10", level 1.2 is encoded as "12". Valid values for **level** may be found  
 **[here](https://www.webmproject.org/vp9/levels/)**.  
 
-**matrixCoefficients** is an integer that is defined by the "Matrix coefficients"  
-section of ISO/IEC 23001-8:2016.  
-
-**transferCharacteristics** is an integer that is defined by the  
-"Transfer characteristics" section of ISO/IEC 23001-8:2016.  
-
-**colourPrimaries** is an integer that is defined by the  
-"Colour primaries" section of ISO/IEC 23001-8:2016.  
-
-For example, `codecs="vp09.02.01.10.09.16.09.01.01"` represents VP9 profile 2  
-YUV 4:2:0 10 bit content with ITU-R BT.2020 primaries, ST 2084 EOTF, and  
+For example, `codecs="vp09.02.10.10.09.16.09.01.01"` represents VP9 profile 2,  
+level 1 YUV 4:2:0 10 bit content with ITU-R BT.2020 primaries, ST 2084 EOTF, and  
 ITU-R BT.2020 non-constant luminance color matrix, 4:2:0 colocated subsampling,  
 using full range.
 
