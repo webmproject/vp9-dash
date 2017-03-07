@@ -153,7 +153,7 @@ to. The value is 0 if a codec level is not specified.
 
 | Value | Level|
 |:-----:|:---------------------------:|
-|  0 | Not Specified|
+|  0 | Unknown|
 | 10 | Level 1|
 | 11 | Level 1.1|
 | 20 | Level 2|
