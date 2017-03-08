@@ -361,7 +361,7 @@ follows:
 <transferCharacteristics>.<matrixCoefficients>.<videoFullRangeFlag>.<chromaSubsampling>
 ~~~~~
 
-Numbers are expressed as double-digit decimals, and all fields are required.
+Numbers are expressed as double-digit decimals.
 
 The **level** parameter is encoded as floating point number (x.y) with the period  
 omitted. Eg. Level 1 is encoded as "10", level 1.2 is encoded as "12". Valid values  
@@ -371,6 +371,30 @@ For example, `codecs="vp09.02.10.10.09.16.09.01.01"` represents VP9 profile 2,
 level 1 YUV 4:2:0 10 bit content with ITU-R BT.2020 primaries, ST 2084 EOTF, and  
 ITU-R BT.2020 non-constant luminance color matrix, 4:2:0 colocated subsampling,  
 using full range.
+
+
+### Mandatory Fields  
+
+**sample entry 4CC**, **profile**, and **level** are all mandatory fields. If  
+one or more of these fields are not specfied then the User Agent must return  
+an error. If **level** has a value of 0 (Non-conformant), then the User Agent  
+must use the value 62 when deciding if the decoder can decode the data.
+
+### Optional Fields  
+
+**colourPrimaries**, **transferCharacteristics**, **matrixCoefficients**,  
+**videoFullRangeFlag**, and **chromaSubsampling** are all optional fields.  
+If any of these fields are not specifed then the User Agent must use the values  
+listed in the table below as defaults when deciding if the decoder can decode the  
+data.  
+
+| Field | Default Value|
+|:-----:|:---------------------------:|
+| **colourPrimaries** | 1 (ITU-R BT.709)|
+| **transferCharacteristics** | 1 (ITU-R BT.709)|
+| **matrixCoefficients** | 1 (ITU-R BT.709)|
+| **videoFullRangeFlag** | 0 (Legal Range)|
+| **chromaSubsampling** | 1 (4:2:0 collocated with luma (0,0))|
 
 * * *
 
