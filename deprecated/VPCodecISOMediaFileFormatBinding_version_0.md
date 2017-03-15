@@ -2,6 +2,8 @@
 VP Codec ISO Media File Format Binding
 ======================================
 
+2017.01.26 Draft
+
 _Kilroy Hughes, Microsoft  
 David Ronca, Netflix  
 Frank Galligan, Google  
@@ -25,9 +27,6 @@ Normative References
   * ISO/IEC 23001-7 second edition 2015-0401, Part 7:  Information technology  
     -- MPEG systems technologies -- Common encryption in ISO base media file  
     format files  
-
-  * SMPTE ST 2086:2014, Mastering Display Color Volume Metadata Supporting High  
-    Luminance and Wide Color Gamut Images  
 
   * VP9 Bitstream and Decoding Process  
 
@@ -124,7 +123,7 @@ unless otherwise noted.
 #### Syntax
 
 ~~~~~
-class VPCodecConfigurationBox extends FullBox('vpcC', version, 1){
+class VPCodecConfigurationBox extends FullBox('vpcC', version, 0){
       VPCodecConfigurationRecord() vpcConfig;
 }
 
@@ -132,11 +131,10 @@ aligned (8) class VPCodecConfigurationRecord {
     unsigned int (8)     profile;
     unsigned int (8)     level;
     unsigned int (4)     bitDepth;
-    unsigned int (3)     chromaSubsampling;
+    unsigned int (4)     colorSpace;
+    unsigned int (4)     chromaSubsampling;
+    unsigned int (3)     transferFunction;
     unsigned int (1)     videoFullRangeFlag;
-    unsigned int (8)     colourPrimaries;
-    unsigned int (8)     transferCharacteristics;
-    unsigned int (8)     matrixCoefficients;
     unsigned int (16)    codecIntializationDataSize;
     unsigned int (8)[]   codecIntializationData;
 }
@@ -149,32 +147,29 @@ profile must be valid for all samples that reference this sample entry, i.e.
 profile SHALL be equal or greater than the profile used to encode the sample.
 
 **level** is an integer that specifies a VP codec level all samples conform  
-to. The value is 0 if a codec level is non-conformant. E.g. If any file has a  
-minimum altref distance that is less than 4.
-
-| Value | Level|
-|:-----:|:---------------------------:|
-|  0 | Non-conformant|
-| 10 | Level 1|
-| 11 | Level 1.1|
-| 20 | Level 2|
-| 21 | Level 2.1|
-| 30 | Level 3|
-| 31 | Level 3.1|
-| 40 | Level 4|
-| 41 | Level 4.1|
-| 50 | Level 5|
-| 51 | Level 5.1|
-| 52 | Level 5.2|
-| 60 | Level 6|
-| 61 | Level 6.1|
-| 62 | Level 6.2|
+to. The value is 0 if a codec level is not specified.
 
 **bitDepth** is an integer that specifies the bit depth of the luma and color  
 components. Valid values are 8, 10, 12.
 
+**colorSpace** is an integer that specifies the color space of the video,  
+enumerated in the following table:
+
+| Value | Color Space|
+|:-----:|:-----------:|
+| 0     | Unspecified|
+| 1     | Rec. ITU-R BT.601-7|
+| 2     | Rec. ITU-R BT.709-6|
+| 3     | SMPTE-­170|
+| 4     | SMPTE­-240|
+| 5     | Rec. ITU-R BT.2020 non-constant luminance|
+| 6     | Rec. ITU-R BT. 2020 constant luminance|
+| 7     | IEC 61966-2-1 (sRGB)|
+| 8..15 | Reserved|
+
+
 **chromaSubsampling** is an integer that specifies the chroma subsampling.  
-Only the values in the following table are specified. If matrixCoefficients is 0  
+Only the values in the following table are specified. If colorspace is 7  
 (RGB), then chroma subsampling must be 3 (4:4:4).
 
 | Value | Subsampling|
@@ -183,7 +178,7 @@ Only the values in the following table are specified. If matrixCoefficients is 0
 | 1 | 4:2:0 collocated with luma (0,0)|
 | 2 | 4:2:2|
 | 3 | 4:4:4|
-|4..7 | Reserved|
+|4..15 | Reserved|
 
 
 <img alt="Figure #1" src="images/image00.png" style="margin: 3em auto 1em auto; display: block;">
@@ -193,18 +188,20 @@ Only the values in the following table are specified. If matrixCoefficients is 0
 <p style="text-align: center;">Figure 2: 4:2:0 chroma subsampling collocated with (0,0) luma</p>
 
 
+**transferFunction** is an integer that specifies the transfer function. Only  
+the values in the following table are specified.
+
+
+| Value | Transfer Function|
+|:-----:|:-----------------:|
+| 0     | Rec. ITU-R BT.709-6, Rec. ITU-R BT.601-7 525 or 625, Rec. ITU-R BT.2020.|
+| 1     | SMPTE ST 2084:2014|
+| 2     | BT.2100 Hybrid Log-Gamma (HLG)|
+| 3..7  | Reserved|
+
 **videoFullRangeFlag** indicates the black level and range of the luma and  
 chroma signals. 0 = legal range (e.g. 16-235 for 8 bit sample depth) 1 = full  
  range (e.g. 0-255 for 8 bit sample depth).  
-
-**colourPrimaries** is an integer that is defined by the  
-"Colour primaries" section of ISO/IEC 23001-8:2016.  
-
-**transferCharacteristics** is an integer that is defined by the  
-"Transfer characteristics" section of ISO/IEC 23001-8:2016.  
-
-**matrixCoefficients** is an integer that is defined by the "Matrix coefficients"  
-section of ISO/IEC 23001-8:2016.  
 
 **codecIntializationDataSize** For VP8 and VP9 this field must be 0.  
 
@@ -223,111 +220,6 @@ structure.
 Note: VP8 does not support superframes, and so it is not possible to carry VP8  
 using this specification if the VP8 stream includes ALTREF frames.
 <sup id="a1">[1](#f1)</sup>  
-
-
-Carriage of HDR Metadata
-------------------------
-
-This section specifies a model for carrying VP codec HDR metadata.  
-
-### SMPTE-2086 Mastering Display Metadata Box
-
-This box contains SMPTE-2086 Mastering Display Metadata information.  
-
-#### Definition
-
-|           |                                 |
-| --------- | --------------------------------|
-| Box Type  | 'SmDm'|
-| Container | Visual Sample Entry Box ('vpxx')|
-| Mandatory | No|
-| Quantity  | Exactly one|
-
-
-~~~~~
-class SMPTE2086MasteringDisplayMetadataBox extends Fullbox(‘SmDm’, 0, 0) {
-    uint16 primaryRChromaticity_x;
-    uint16 primaryRChromaticity_y;
-    uint16 primaryGChromaticity_x;
-    uint16 primaryGChromaticity_y;
-    uint16 primaryBChromaticity_x;
-    uint16 primaryBChromaticity_y;
-    uint16 whitePointChromaticity_x;
-    uint16 whitePointChromaticity_y;
-    uint32 luminanceMax;
-    uint32 luminanceMin;
-}
-~~~~~
-
-#### Semantics
-
-**primaryRChromaticity_x** a 0.16 fixed-point Red X chromaticity coordinate as  
-defined by CIE 1931  
-  
-**primaryRChromaticity_y** is a 0.16 fixed-point Red Y chromaticity coordinate  
-as defined by CIE 1931  
-  
-**primaryGChromaticity_x** is a 0.16 fixed-point Green X chromaticity coordinate  
-as defined by CIE 1931  
-  
-**primaryGChromaticity_y** is a 0.16 fixed-point Green Y chromaticity coordinate  
-as defined by CIE 1931  
-  
-**primaryBChromaticity_x** is a 0.16 fixed-point Blue X chromaticity coordinate  
-as defined by CIE 1931  
-  
-**primaryBChromaticity_y** is a 0.16 fixed-point Blue Y chromaticity coordinate  
-as defined by CIE 1931  
-  
-**whitePointChromaticity_x** is a 0.16 fixed-point White X chromaticity  
-coordinate as defined by CIE 1931  
-  
-**whitePointChromaticity_y** is a 0.16 fixed-point White Y chromaticity  
-coordinate as defined by CIE 1931  
-  
-**luminanceMax** is a 24.8 fixed point Maximum luminance, represented in  
-candelas per square meter (cd/m²)  
-  
-**luminanceMin** is a 18.14 fixed point Minimum luminance, represented in  
-candelas per square meter (cd/m²)  
-
-
-### Content Light Level Box 
-
-This box contains content light level information.
-
-#### Definition
-
-|           |                                 |
-| --------- | --------------------------------|
-| Box Type  | 'CoLL'|
-| Container | Visual Sample Entry Box ('vpxx')|
-| Mandatory | No|
-| Quantity  | Exactly one|
-
-The ‘coll’ box is used to provide the Maximum Content Light Level (maxCLL) and  
-Maximum Frame-Average Light Level (maxFALL), calculated as specified in  
-CEA-861.3, Appendix A. These values are coded as unsigned 16-bit integers. The  
-units for these fields are cd/m2 when the brightest pixel in the entire video  
-stream has the chromaticity of the white point of the encoding system used to  
-represent the video stream.  
-
-#### Syntax
-
-~~~~~
-class ContentLightLevelBox extends Fullbox(‘CoLL’, 0, 0) {
-    uint16 maxCLL;
-    uint16 maxFALL;
-}
-~~~~~
-
-#### Semantics
-
-**maxCLL** is a 16-bit integer that specifies the Maximum Content Light Level as  
-specified in CEA-861.3, Appendix A..  
-
-**maxFALL** is a 16-bit integer that specifies the Maximum Frame-Average Light  
-Level as specified in CEA-861.3, Appendix A.  
 
 
 Common Encryption
@@ -376,50 +268,20 @@ specified in RFC-6381 for ISO Media tracks. The codecs string for VP is as
 follows:  
 
 ~~~~~
-<sample entry 4CC>.<profile>.<level>.<bitDepth>.<chromaSubsampling>.
-<colourPrimaries>.<transferCharacteristics>.<matrixCoefficients>.
-<videoFullRangeFlag>
+<sample entry 4CC>.<profile>.<level>.<bitDepth>.<colorSpace>.<chromaSubsampling>.
+<transferFunction>.<videoFullRangeFlag>
 ~~~~~
 
-Numbers are expressed as double-digit decimals.
+Numbers are expressed as double-digit decimals, and all fields are required.
 
 The **level** parameter is encoded as floating point number (x.y) with the period  
-omitted. Eg. Level 1 is encoded as "10", level 1.2 is encoded as "12". Valid values  
-for **level** may be found **[here](https://www.webmproject.org/vp9/levels/)**.  
+omitted. For whole numbers, the decimal part is omitted. Eg. Level 1 is encoded  
+as "01", level 1.2 is encoded as "12". Valid values for **level** may be found  
+**[here](https://www.webmproject.org/vp9/levels/)**.  
 
-For example, `codecs="vp09.02.10.10.01.09.16.09.01"` represents VP9 profile 2,  
-level 1, 10 bit YUV content with 4:2:0 chroma subsampling, ITU-R BT.2020  
-primaries, ST 2084 EOTF, ITU-R BT.2020 non-constant luminance color matrix, and  
-full range chroma/luma encoding.
-
-### Mandatory Fields  
-
-**sample entry 4CC**, **profile**, **level**, and **bitDepth** are all  
-mandatory fields. If one or more of these fields are not specfied then the  
-device must return an error. If **level** has a value of 0 (Non-conformant),  
-then the User Agent must use the highest value (62) when deciding if the  
-device can decode and render the bitstream.  
-
-### Optional Fields  
-
-**colourPrimaries**, **transferCharacteristics**, **matrixCoefficients**,  
-**videoFullRangeFlag**, and **chromaSubsampling** are all optional fields.  
-If any of these fields are not specifed then the User Agent must use the values  
-listed in the table below as defaults when deciding if the decoder can decode the  
-data.  
-
-| Field | Default Value|
-|:-----:|:---------------------------:|
-| **chromaSubsampling** | 1 (4:2:0 collocated with luma (0,0))|
-| **colourPrimaries** | 1 (ITU-R BT.709)|
-| **transferCharacteristics** | 1 (ITU-R BT.709)|
-| **matrixCoefficients** | 1 (ITU-R BT.709)|
-| **videoFullRangeFlag** | 0 (Legal Range)|
-
-The string `codecs="vp09.01.41.08"` in this case would represent VP9 profile 1;  
-level 4.1; 8-bit YUV content with 4:2:0 chroma subsampling; ITU-R BT.708 color  
-primaries, tranfer function, and matrix coefficients; and luma/chroma encoded  
-in the "legal" range.
+For example, `codecs="vp09.02.01.10.05.01.01.01"` represents 10 bit 4:2:0 Rec.  
+ITU-R BT.2020 non-constant luminance video encoded using VP9 profile 2  
+and level 1, 4:2:0 colocated subsampling, st-2084 EOTF.  
 
 * * *
 
