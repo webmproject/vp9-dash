@@ -149,7 +149,9 @@ profile must be valid for all samples that reference this sample entry, i.e.
 profile SHALL be equal or greater than the profile used to encode the sample.
 
 **level** is an integer that specifies a VP codec level all samples conform  
-to. The value is 0 if a codec level is not specified.
+to. This value is encoded as the binary coded decimal representation of  
+(level x 10). E.g "1.2" is encoded as decimal 12.  The value is 0 if a codec  
+level is not specified.  
 
 **bitDepth** is an integer that specifies the bit depth of the luma and color  
 components. Valid values are 8, 10, 12.
@@ -357,8 +359,9 @@ specified in RFC-6381 for ISO Media tracks. The codecs string for VP is as
 follows:  
 
 ~~~~~
-<sample entry 4CC>.<profile>.<level>.<bitDepth>.<colourPrimaries>.
-<transferCharacteristics>.<matrixCoefficients>.<videoFullRangeFlag>.<chromaSubsampling>
+<sample entry 4CC>.<profile>.<level>.<bitDepth>.<chromaSubsampling>.
+<colourPrimaries>.<transferCharacteristics>.<matrixCoefficients>.
+<videoFullRangeFlag>
 ~~~~~
 
 Numbers are expressed as double-digit decimals.
@@ -367,18 +370,18 @@ The **level** parameter is encoded as floating point number (x.y) with the perio
 omitted. Eg. Level 1 is encoded as "10", level 1.2 is encoded as "12". Valid values  
 for **level** may be found **[here](https://www.webmproject.org/vp9/levels/)**.  
 
-For example, `codecs="vp09.02.10.10.09.16.09.01.01"` represents VP9 profile 2,  
-level 1 YUV 4:2:0 10 bit content with ITU-R BT.2020 primaries, ST 2084 EOTF, and  
-ITU-R BT.2020 non-constant luminance color matrix, 4:2:0 colocated subsampling,  
-using full range.
-
+For example, `codecs="vp09.02.10.10.01.09.16.09.01"` represents VP9 profile 2,  
+level 1, 10 bit YUV content with 4:2:0 chroma subsampling, ITU-R BT.2020  
+primaries, ST 2084 EOTF, ITU-R BT.2020 non-constant luminance color matrix, and  
+full range chroma/luma encoding.
 
 ### Mandatory Fields  
 
-**sample entry 4CC**, **profile**, and **level** are all mandatory fields. If  
-one or more of these fields are not specfied then the User Agent must return  
-an error. If **level** has a value of 0 (Non-conformant), then the User Agent  
-must use the value 62 when deciding if the decoder can decode the data.
+**sample entry 4CC**, **profile**, **level**, and **bitDepth** are all  
+mandatory fields. If one or more of these fields are not specfied then the  
+device must return an error. If **level** has a value of 0 (Non-conformant),  
+then the User Agent must use the highest value (62) when deciding if the  
+device can decode and render the bitstream.  
 
 ### Optional Fields  
 
@@ -390,11 +393,16 @@ data.
 
 | Field | Default Value|
 |:-----:|:---------------------------:|
+| **chromaSubsampling** | 1 (4:2:0 collocated with luma (0,0))|
 | **colourPrimaries** | 1 (ITU-R BT.709)|
 | **transferCharacteristics** | 1 (ITU-R BT.709)|
 | **matrixCoefficients** | 1 (ITU-R BT.709)|
 | **videoFullRangeFlag** | 0 (Legal Range)|
-| **chromaSubsampling** | 1 (4:2:0 collocated with luma (0,0))|
+
+The string `codecs="vp09.01.41.08"` in this case would represent VP9 profile 1;  
+level 4.1; 8-bit YUV content with 4:2:0 chroma subsampling; ITU-R BT.708 color  
+primaries, tranfer function, and matrix coefficients; and luma/chroma encoded  
+in the "legal" range.
 
 * * *
 
