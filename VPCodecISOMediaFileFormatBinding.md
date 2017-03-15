@@ -149,12 +149,10 @@ profile must be valid for all samples that reference this sample entry, i.e.
 profile SHALL be equal or greater than the profile used to encode the sample.
 
 **level** is an integer that specifies a VP codec level all samples conform  
-to. The value is 0 if a codec level is non-conformant. E.g. If any file has a  
-minimum altref distance that is less than 4.
+to.  
 
 | Value | Level|
 |:-----:|:---------------------------:|
-|  0 | Non-conformant|
 | 10 | Level 1|
 | 11 | Level 1.1|
 | 20 | Level 2|
@@ -396,9 +394,7 @@ full range chroma/luma encoding.
 
 **sample entry 4CC**, **profile**, **level**, and **bitDepth** are all  
 mandatory fields. If one or more of these fields are not specfied then the  
-device must return an error. If **level** has a value of 0 (Non-conformant),  
-then the User Agent must use the highest value (62) when deciding if the  
-device can decode and render the bitstream.  
+device must return an error.  
 
 ### Optional Fields  
 
