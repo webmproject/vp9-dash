@@ -149,7 +149,26 @@ profile must be valid for all samples that reference this sample entry, i.e.
 profile SHALL be equal or greater than the profile used to encode the sample.
 
 **level** is an integer that specifies a VP codec level all samples conform  
-to. The value is 0 if a codec level is not specified.
+to. The value is 0 if a codec level is non-conformant. E.g. If any file has a  
+minimum altref distance that is less than 4.
+
+| Value | Level|
+|:-----:|:---------------------------:|
+|  0 | Non-conformant|
+| 10 | Level 1|
+| 11 | Level 1.1|
+| 20 | Level 2|
+| 21 | Level 2.1|
+| 30 | Level 3|
+| 31 | Level 3.1|
+| 40 | Level 4|
+| 41 | Level 4.1|
+| 50 | Level 5|
+| 51 | Level 5.1|
+| 52 | Level 5.2|
+| 60 | Level 6|
+| 61 | Level 6.1|
+| 62 | Level 6.2|
 
 **bitDepth** is an integer that specifies the bit depth of the luma and color  
 components. Valid values are 8, 10, 12.
