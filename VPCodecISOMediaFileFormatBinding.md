@@ -393,8 +393,8 @@ full range chroma/luma encoding.
 ### Mandatory Fields  
 
 **sample entry 4CC**, **profile**, **level**, and **bitDepth** are all  
-mandatory fields. If one or more of these fields are not specfied then the  
-device must return an error.  
+mandatory fields. If any of these fields are unspecified or not within their  
+allowed range, the device shall treat it as an error.  
 
 ### Optional Fields  
 
