@@ -362,7 +362,7 @@ the superframe. Block alignment is achieved by adjusting the size of the
 unencrypted bytes that precede the encrypted bytes for that frame.  
 
 
-<img alt="Figure #3" src="images/image02.png" style="margin: 3em auto 1em auto; display: block;">
+<img alt="Figure #3" src="images/vp9-encryption-flow.png" style="margin: 3em auto 1em auto; display: block;">
 <p style="text-align: center;">Figure 3: Sample-based VP9 encryption with clear uncompressed header</p>
 
 
