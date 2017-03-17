@@ -400,7 +400,7 @@ allowed range, the device shall treat it as an error.
 
 **colourPrimaries**, **transferCharacteristics**, **matrixCoefficients**,  
 **videoFullRangeFlag**, and **chromaSubsampling** are all optional fields.  
-If any of these fields are not specifed then the User Agent must use the values  
+If any of these fields are not specified then the User Agent must use the values  
 listed in the table below as defaults when deciding if the decoder can decode the  
 data.  
 
