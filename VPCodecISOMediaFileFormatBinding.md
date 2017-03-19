@@ -219,8 +219,7 @@ a 'pasp' box must be included.  ALTREF frames must be part of a superframe
 structure.  
 
 Note: VP8 does not support superframes, and so it is not possible to carry VP8  
-using this specification if the VP8 stream includes ALTREF frames.
-<sup id="a1">[1](#f1)</sup>  
+using this specification if the VP8 stream includes ALTREF frames.[^1]
 
 
 Carriage of HDR Metadata
@@ -383,7 +382,7 @@ Numbers are expressed as double-digit decimals.
 
 The **level** parameter is encoded as floating point number (x.y) with the period  
 omitted. Eg. Level 1 is encoded as "10", level 1.2 is encoded as "12". Valid values  
-for **level** may be found **[here](https://www.webmproject.org/vp9/levels/)**.  
+for **level** may be found on the Webm Project site.[^2]
 
 For example, `codecs="vp09.02.10.10.01.09.16.09.01"` represents VP9 profile 2,  
 level 1, 10 bit YUV content with 4:2:0 chroma subsampling, ITU-R BT.2020  
@@ -419,5 +418,5 @@ in the "legal" range.
 
 * * *
 
-<small><b id="f1">1.</b> A model for carriage of VP8 ALTREF frames may be considered
-for a future version of this specification.</small>
+[^1]: A model for carriage of VP8 ALTREF frames may be considered for a future version of this specification.
+[^2]: [VP9 Levels](https://www.webmproject.org/vp9/levels/)
