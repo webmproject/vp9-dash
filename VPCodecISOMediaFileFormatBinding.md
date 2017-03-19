@@ -433,4 +433,5 @@ encoded in the "legal" range.
 * * *
 
 [^1]: A model for carriage of VP8 ALTREF frames may be considered for a future version of this specification.
+
 [^2]: [VP9 Levels](https://www.webmproject.org/vp9/levels/)
