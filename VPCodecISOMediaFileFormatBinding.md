@@ -2,10 +2,10 @@
 VP Codec ISO Media File Format Binding
 ======================================
 
-_Kilroy Hughes, Microsoft  
-David Ronca, Netflix  
-Frank Galligan, Google  
-Thomas Inskip, Google_
+_Frank Galligan, Google  
+Kilroy Hughes, Microsoft  
+Thomas Inskip, Google  
+David Ronca, Netflix_
 
 
 Introduction
