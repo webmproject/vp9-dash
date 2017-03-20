@@ -193,17 +193,17 @@ Only the values in the following table are specified. If matrixCoefficients is
 | Value | Subsampling|
 |:-----:|:--------------------------------:|
 | 0     | 4:2:0 vertical                   |
-| 1     | 4:2:0 collocated with luma (0,0) |
+| 1     | 4:2:0 colocated with luma (0,0)  |
 | 2     | 4:2:2                            |
 | 3     | 4:4:4                            |
 | 4..7  | Reserved                         |
 
 
-<img alt="Figure #1" src="images/image00.png" style="margin: 3em auto 1em auto; display: block;" class="">
-<p  class="caption">Figure 1: 4:2:0 Subsampling with vertical chroma samples</p>
+<img alt="Figure #1" src="images/420-vertical-chroma.png" style="margin: 3em auto 1em auto; display: block;">
+<p style="text-align: center;">Figure 1: 4:2:0 Subsampling with vertical chroma samples</p>
 
-<img alt="Figure #2" src="images/image01.png" style="margin: 3em auto 1em auto; display: block;">
-<p  class="caption">Figure 2: 4:2:0 chroma subsampling collocated with (0,0) luma</p>
+<img alt="Figure #2" src="images/420-chroma-colocated.png" style="margin: 3em auto 1em auto; display: block;">
+<p style="text-align: center;">Figure 2: 4:2:0 chroma subsampling colocated with (0,0) luma</p>
 
 
 **videoFullRangeFlag** indicates the black level and range of the luma and
@@ -430,7 +430,7 @@ decode the data.
 
 | Field | Default Value                                              |
 |:-----:|:----------------------------------------------------------:|
-| **chromaSubsampling**       | 1 (4:2:0 collocated with luma (0,0)) |
+| **chromaSubsampling**       | 1 (4:2:0 colocated with luma (0,0))  |
 | **colourPrimaries**         | 1 (ITU-R BT.709)                     |
 | **transferCharacteristics** | 1 (ITU-R BT.709)                     |
 | **matrixCoefficients**      | 1 (ITU-R BT.709)                     |
