@@ -1,6 +1,8 @@
 
 VP Codec ISO Media File Format Binding
 ======================================
+{:.no_toc}
+
 
 _Frank Galligan, Google  
 Kilroy Hughes, Microsoft  
@@ -10,10 +12,15 @@ David Ronca, Netflix_
 
 Introduction
 ------------
+{:.no_toc}
 
 This document specifies a general ISO Base Media track and sample format for
 video encoded with Video Partition structured video codecs ("VP"), such as
 MPEG VCB (MPEG-4 Part 31), VP8, VP9, etc.
+
+
+* toc
+{:toc}
 
 
 Normative References
@@ -364,8 +371,8 @@ A subsample encryption (SENC) map must be used to identify the clear and
 encrypted bytes of each video sample. This is illustrated in figure 1.
 
 When encrypting superframes, the uncompressed headers of the displayed frame,
-the uncompressed headers for all ALTREF frames, and the the superframe header
-must be clear. The encrypted bytes of each frame within the superframe must be
+the uncompressed headers for all ALTREF frames, and the superframe header must
+be clear. The encrypted bytes of each frame within the superframe must be
 block aligned so that the counter state can be computed for each frame within
 the superframe. Block alignment is achieved by adjusting the size of the
 unencrypted bytes that precede the encrypted bytes for that frame.
