@@ -1,13 +1,18 @@
 
 VP Codec ISO Media File Format Binding
 ======================================
-{:.no_toc}
+{:.no_toc .title }
 
+
+v1.0 2017-03-20
+{:.version }
 
 _Frank Galligan, Google  
 Kilroy Hughes, Microsoft  
 Thomas Inskip, Google  
 David Ronca, Netflix_
+{:.authors }
+
 
 
 Introduction
@@ -194,11 +199,11 @@ Only the values in the following table are specified. If matrixCoefficients is
 | 4..7  | Reserved                         |
 
 
-<img alt="Figure #1" src="images/image00.png" style="margin: 3em auto 1em auto; display: block;">
-<p style="text-align: center;">Figure 1: 4:2:0 Subsampling with vertical chroma samples</p>
+<img alt="Figure #1" src="images/image00.png" style="margin: 3em auto 1em auto; display: block;" class="">
+<p  class="caption">Figure 1: 4:2:0 Subsampling with vertical chroma samples</p>
 
 <img alt="Figure #2" src="images/image01.png" style="margin: 3em auto 1em auto; display: block;">
-<p style="text-align: center;">Figure 2: 4:2:0 chroma subsampling collocated with (0,0) luma</p>
+<p  class="caption">Figure 2: 4:2:0 chroma subsampling collocated with (0,0) luma</p>
 
 
 **videoFullRangeFlag** indicates the black level and range of the luma and
@@ -379,7 +384,7 @@ unencrypted bytes that precede the encrypted bytes for that frame.
 
 
 <img alt="Figure #3" src="images/vp9-encryption-flow.png" style="margin: 3em auto 1em auto; display: block;">
-<p style="text-align: center;">Figure 3: Sample-based VP9 encryption with clear uncompressed header</p>
+<p  class="caption">Figure 3: Sample-based VP9 encryption with clear uncompressed header</p>
 
 
 DASH Application

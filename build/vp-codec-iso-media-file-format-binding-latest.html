@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+  body {
+    margin: 10%;
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #000;
+    background-color: #fff;
+    line-height: 1.4;
+  }
+  h2, h3, h4, h5 {
+    margin-top: 1.5em;
+    margin-bottom: .5em;
+  }
+  h1.title,
+  p.version,
+  p.authors {
+    text-align: center;
+  }
+  p.version {
+    margin: -1em auto 2em;
+  }
+  h2 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0;
+  }
+  table {
+    border-collapse: collapse;
+    margin: 0 auto;
+  }
+  th, td {
+    border: 1px solid #999;
+    padding: .5em .7em;;
+  }
+  th {
+    color: #fff;
+    background-color: #000;
+  }
+  th:empty {
+    display: none;
+  }
+  td {
+  }
+  hr {
+  }
+  pre {
+    background-color: #eee;
+    padding: 1em;
+    border: 1px solid #ccc;
+    overflow: auto;
+    font-family: Consolata, monospace;
+  }
+  code {
+    color: #060;
+    background-color: #eee;
+    padding: 0 3px;
+    font-family: Consolata, monospace;
+    font-size: smaller;
+  }
+  pre code {
+    padding: 0;
+  }
+  .caption,
+  .footnotes {
+    font-style: italic;
+    font-size: 12px;
+  }
+  .caption {
+    text-align: center;
+  }
+  ul#markdown-toc:before {
+    width: 100%;
+    content: "Contents";
+    font-weight: bold;
+    position: relative;
+    text-align: center;
+    display: block;
+    margin-bottom: .5em;
+  }
+  ul#markdown-toc {
+    display: inline-block;
+    border: 1px solid #ccc;
+    background-color: #f7f7f7;
+    padding: 1em;
+    -webkit-margin-start: 1em;
+    -webkit-padding-start: 1em;
+  }
+  #markdown-toc ul {
+    -webkit-margin-start: .75em;
+    -webkit-padding-start: .75em;
+  }
+  #markdown-toc li {
+    list-style-type: none;
+    text-decoration: none;
+    font-size: 12px;
+  }
+  #markdown-toc a {
+    text-decoration: none;
+  }
+  div.footnotes ol {
+    -webkit-padding-start: 0;
+    padding-left: 1em;
+  }
+
+  // Print rules
+  // Try not to pagebreak tables and code blocks, and not to
+  // orphan headings. Also set max image width when printing.
+  @page {
+    size: letter;
+    margin: .75in;
+    @bottom-right {
+      content: "Page " counter(page) " of " counter(pages);
+    }
+  }
+  @media print {
+    table, pre {
+      page-break-inside: avoid;
+    }
+    h2, h3, h4, h5 {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    img {
+      max-width: 6.5in;
+    }
+  }
+  </style>
+</head>
+
+<body>
+
+<h1 class="no_toc title" id="vp-codec-iso-media-file-format-binding">VP Codec ISO Media File Format Binding</h1>
+
+<p class="version">v1.0 2017-03-20</p>
+
+<p class="authors"><em>Frank Galligan, Google<br />
+Kilroy Hughes, Microsoft<br />
+Thomas Inskip, Google<br />
+David Ronca, Netflix</em></p>
+
+<h2 class="no_toc" id="introduction">Introduction</h2>
+
+<p>This document specifies a general ISO Base Media track and sample format for
+video encoded with Video Partition structured video codecs (“VP”), such as
+MPEG VCB (MPEG-4 Part 31), VP8, VP9, etc.</p>
+
+<ul id="markdown-toc">
+  <li><a href="#normative-references" id="markdown-toc-normative-references">Normative References</a></li>
+  <li><a href="#data-types-and-fields" id="markdown-toc-data-types-and-fields">Data Types and Fields</a></li>
+  <li><a href="#basic-encapsulation-scheme" id="markdown-toc-basic-encapsulation-scheme">Basic Encapsulation Scheme</a>    <ul>
+      <li><a href="#vp-codec-sample-entry-box" id="markdown-toc-vp-codec-sample-entry-box">VP Codec Sample Entry Box</a>        <ul>
+          <li><a href="#definition" id="markdown-toc-definition">Definition</a></li>
+          <li><a href="#syntax" id="markdown-toc-syntax">Syntax</a></li>
+          <li><a href="#semantics" id="markdown-toc-semantics">Semantics</a></li>
+        </ul>
+      </li>
+      <li><a href="#vp-codec-configuration-box" id="markdown-toc-vp-codec-configuration-box">VP Codec Configuration Box</a>        <ul>
+          <li><a href="#definition-1" id="markdown-toc-definition-1">Definition</a></li>
+          <li><a href="#description" id="markdown-toc-description">Description</a></li>
+          <li><a href="#syntax-1" id="markdown-toc-syntax-1">Syntax</a></li>
+          <li><a href="#semantics-1" id="markdown-toc-semantics-1">Semantics</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#video-samples" id="markdown-toc-video-samples">Video Samples</a></li>
+  <li><a href="#carriage-of-hdr-metadata" id="markdown-toc-carriage-of-hdr-metadata">Carriage of HDR Metadata</a>    <ul>
+      <li><a href="#smpte-2086-mastering-display-metadata-box" id="markdown-toc-smpte-2086-mastering-display-metadata-box">SMPTE-2086 Mastering Display Metadata Box</a>        <ul>
+          <li><a href="#definition-2" id="markdown-toc-definition-2">Definition</a></li>
+          <li><a href="#semantics-2" id="markdown-toc-semantics-2">Semantics</a></li>
+        </ul>
+      </li>
+      <li><a href="#content-light-level-box" id="markdown-toc-content-light-level-box">Content Light Level Box</a>        <ul>
+          <li><a href="#definition-3" id="markdown-toc-definition-3">Definition</a></li>
+          <li><a href="#syntax-2" id="markdown-toc-syntax-2">Syntax</a></li>
+          <li><a href="#semantics-3" id="markdown-toc-semantics-3">Semantics</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#common-encryption" id="markdown-toc-common-encryption">Common Encryption</a>    <ul>
+      <li><a href="#scheme-info-box-sinf" id="markdown-toc-scheme-info-box-sinf">Scheme Info Box (sinf)</a></li>
+      <li><a href="#sample-encryption" id="markdown-toc-sample-encryption">Sample Encryption</a></li>
+    </ul>
+  </li>
+  <li><a href="#dash-application" id="markdown-toc-dash-application">DASH Application</a>    <ul>
+      <li><a href="#mandatory-fields" id="markdown-toc-mandatory-fields">Mandatory Fields</a></li>
+      <li><a href="#optional-fields" id="markdown-toc-optional-fields">Optional Fields</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="normative-references">Normative References</h2>
+
+<ul>
+  <li>
+    <p>ISO/IEC 14496‐12, Information technology – Coding of audio-visual objects
+– Part 12: ISO base media file format</p>
+  </li>
+  <li>
+    <p>ISO/IEC 23001-7 second edition 2015-0401, Part 7:  Information technology
+– MPEG systems technologies – Common encryption in ISO base media file
+format files</p>
+  </li>
+  <li>
+    <p>SMPTE ST 2086:2014, Mastering Display Color Volume Metadata Supporting
+High Luminance and Wide Color Gamut Images</p>
+  </li>
+  <li>
+    <p>VP9 Bitstream and Decoding Process</p>
+  </li>
+</ul>
+
+<h2 id="data-types-and-fields">Data Types and Fields</h2>
+
+<p>Fixed-point numbers are signed or unsigned values resulting from dividing an
+integer by an appropriate power of 2. For example, a 0.16 fixed-point number
+is formed by dividing a 16-bit integer by 2^16.</p>
+
+<h2 id="basic-encapsulation-scheme">Basic Encapsulation Scheme</h2>
+
+<p>This section describes the basic data structures used to signal encapsulation
+of VP encoded video in ISO-BMFF containers.</p>
+
+<h3 id="vp-codec-sample-entry-box">VP Codec Sample Entry Box</h3>
+
+<p>The VP Codec Sample Entry box describes the sample entry and sample format for
+VP elementary streams.</p>
+
+<h4 id="definition">Definition</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Box Type</td>
+      <td>‘vp_xx_’ where ‘xx’ is one of ‘08’, ‘09’ or ‘10’</td>
+    </tr>
+    <tr>
+      <td>Container</td>
+      <td>Sample Description Box (‘stsd’)</td>
+    </tr>
+    <tr>
+      <td>Mandatory</td>
+      <td>Yes, for VP codec tracks</td>
+    </tr>
+    <tr>
+      <td>Quantity</td>
+      <td>Exactly one</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The ‘vpxx’ Sample Entry Box specifies the coding of Video Partition Codec
+samples, and contains a ‘vpcC’ box that contains decoding and display
+configuration information. ‘vpxx’ indicates the generic class used to
+generate a box instance identified by the 4CC of the specific codec used.
+The 4CC codes currently defined by this spec are ‘vp08’, ‘vp09’, ‘vp10’.</p>
+
+<h4 id="syntax">Syntax</h4>
+
+<pre><code>class VP8SampleEntry extends VisualSampleEntry('vp08') {
+    VPCodecConfigurationBox    config;
+}
+
+class VP9SampleEntry extends VisualSampleEntry('vp09') {
+    VPCodecConfigurationBox    config;
+}
+
+class VP10SampleEntry extends VisualSampleEntry('vp10') {
+    VPCodecConfigurationBox    config;
+}
+</code></pre>
+
+<h4 id="semantics">Semantics</h4>
+
+<p><strong>compressorname</strong> is a name, for informative purposes. It is formatted in a
+fixed 32-byte field, with the first byte set to the number of bytes to be
+displayed, followed by that number of bytes of displayable data, and then
+padding to complete 32 bytes total (including the size byte). The field may
+be set to 0. The value “\012VPC Coding” is recommended; the first byte is a
+count of the remaining bytes, here represented by \012, which (being octal
+12) is 10 (decimal), the number of bytes in the rest of the string</p>
+
+<p><strong>config</strong> is defined in the following section.</p>
+
+<h3 id="vp-codec-configuration-box">VP Codec Configuration Box</h3>
+
+<h4 id="definition-1">Definition</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Box Type</td>
+      <td>‘vpcC’</td>
+    </tr>
+    <tr>
+      <td>Container</td>
+      <td>VP Codec Sample Entry Box (‘vpxx’)</td>
+    </tr>
+    <tr>
+      <td>Mandatory</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>Quantity</td>
+      <td>Exactly One</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="description">Description</h4>
+
+<p>The VP Codec Configuration Box is contained in every VP Codec Sample Entry
+Box. It exposes the general video parameters in standard fields, useful for
+track selection and display; and it contains decoder initialization
+information specific to the codec and sample format indicated by the 4CC code
+of the sample entry box that contains it. All parameters must be valid for
+every sample that references the sample entry, and equal the parameter value
+unless otherwise noted.</p>
+
+<h4 id="syntax-1">Syntax</h4>
+
+<pre><code>class VPCodecConfigurationBox extends FullBox('vpcC', version, 1){
+      VPCodecConfigurationRecord() vpcConfig;
+}
+
+aligned (8) class VPCodecConfigurationRecord {
+    unsigned int (8)     profile;
+    unsigned int (8)     level;
+    unsigned int (4)     bitDepth;
+    unsigned int (3)     chromaSubsampling;
+    unsigned int (1)     videoFullRangeFlag;
+    unsigned int (8)     colourPrimaries;
+    unsigned int (8)     transferCharacteristics;
+    unsigned int (8)     matrixCoefficients;
+    unsigned int (16)    codecIntializationDataSize;
+    unsigned int (8)[]   codecIntializationData;
+}
+</code></pre>
+
+<h4 id="semantics-1">Semantics</h4>
+
+<p><strong>profile</strong> is an integer that specifies the VP codec profile. The value of
+profile must be valid for all samples that reference this sample entry, i.e.
+profile SHALL be equal or greater than the profile used to encode the sample.</p>
+
+<p><strong>level</strong> is an integer that specifies a VP codec level all samples conform
+to.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Value</th>
+      <th style="text-align: center">Level</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">10</td>
+      <td style="text-align: center">Level 1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">11</td>
+      <td style="text-align: center">Level 1.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">20</td>
+      <td style="text-align: center">Level 2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">21</td>
+      <td style="text-align: center">Level 2.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">30</td>
+      <td style="text-align: center">Level 3</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">31</td>
+      <td style="text-align: center">Level 3.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">40</td>
+      <td style="text-align: center">Level 4</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">41</td>
+      <td style="text-align: center">Level 4.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">50</td>
+      <td style="text-align: center">Level 5</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">51</td>
+      <td style="text-align: center">Level 5.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">52</td>
+      <td style="text-align: center">Level 5.2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">60</td>
+      <td style="text-align: center">Level 6</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">61</td>
+      <td style="text-align: center">Level 6.1</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">62</td>
+      <td style="text-align: center">Level 6.2</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>bitDepth</strong> is an integer that specifies the bit depth of the luma and color
+components. Valid values are 8, 10, 12.</p>
+
+<p><strong>chromaSubsampling</strong> is an integer that specifies the chroma subsampling.
+Only the values in the following table are specified. If matrixCoefficients is
+0 (RGB), then chroma subsampling must be 3 (4:4:4).</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Value</th>
+      <th style="text-align: center">Subsampling</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">0</td>
+      <td style="text-align: center">4:2:0 vertical</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">1</td>
+      <td style="text-align: center">4:2:0 collocated with luma (0,0)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2</td>
+      <td style="text-align: center">4:2:2</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">3</td>
+      <td style="text-align: center">4:4:4</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">4..7</td>
+      <td style="text-align: center">Reserved</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img alt="Figure #1" src="../images/image00.png" style="margin: 3em auto 1em auto; display: block;" class="" /></p>
+<p class="caption">Figure 1: 4:2:0 Subsampling with vertical chroma samples</p>
+
+<p><img alt="Figure #2" src="../images/image01.png" style="margin: 3em auto 1em auto; display: block;" /></p>
+<p class="caption">Figure 2: 4:2:0 chroma subsampling collocated with (0,0) luma</p>
+
+<p><strong>videoFullRangeFlag</strong> indicates the black level and range of the luma and
+chroma signals. 0 = legal range (e.g. 16-235 for 8 bit sample depth) 1 = full
+range (e.g. 0-255 for 8 bit sample depth).</p>
+
+<p><strong>colourPrimaries</strong> is an integer that is defined by the “Colour primaries”
+section of ISO/IEC 23001-8:2016.</p>
+
+<p><strong>transferCharacteristics</strong> is an integer that is defined by the “Transfer
+characteristics” section of ISO/IEC 23001-8:2016.</p>
+
+<p><strong>matrixCoefficients</strong> is an integer that is defined by the “Matrix
+coefficients” section of ISO/IEC 23001-8:2016.</p>
+
+<p><strong>codecIntializationDataSize</strong> For VP8 and VP9 this field must be 0.</p>
+
+<p><strong>codecIntializationData</strong> binary codec initialization data. Not used for VP8
+**and VP9.</p>
+
+<h2 id="video-samples">Video Samples</h2>
+
+<p>Video sample storage in the generic binding uses a simple mapping to frames
+defined in the codec specification. The height and width in the Visual Sample
+Entry are specified in square pixels. If the video pixels are not square, then
+a ‘pasp’ box must be included. ALTREF frames must be part of a superframe
+structure.</p>
+
+<p>Note: VP8 does not support superframes, and so it is not possible to carry VP8
+using this specification if the VP8 stream includes ALTREF frames.<sup id="fnref:1"><a href="#fn:1" class="footnote">1</a></sup></p>
+
+<h2 id="carriage-of-hdr-metadata">Carriage of HDR Metadata</h2>
+
+<p>This section specifies a model for carrying VP codec HDR metadata.</p>
+
+<h3 id="smpte-2086-mastering-display-metadata-box">SMPTE-2086 Mastering Display Metadata Box</h3>
+
+<p>This box contains SMPTE-2086 Mastering Display Metadata information.</p>
+
+<h4 id="definition-2">Definition</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Box Type</td>
+      <td>‘SmDm’</td>
+    </tr>
+    <tr>
+      <td>Container</td>
+      <td>Visual Sample Entry Box (‘vpxx’)</td>
+    </tr>
+    <tr>
+      <td>Mandatory</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Quantity</td>
+      <td>Exactly one</td>
+    </tr>
+  </tbody>
+</table>
+
+<pre><code>class SMPTE2086MasteringDisplayMetadataBox extends Fullbox('SmDm', 0, 0) {
+    uint16 primaryRChromaticity_x;
+    uint16 primaryRChromaticity_y;
+    uint16 primaryGChromaticity_x;
+    uint16 primaryGChromaticity_y;
+    uint16 primaryBChromaticity_x;
+    uint16 primaryBChromaticity_y;
+    uint16 whitePointChromaticity_x;
+    uint16 whitePointChromaticity_y;
+    uint32 luminanceMax;
+    uint32 luminanceMin;
+}
+</code></pre>
+
+<h4 id="semantics-2">Semantics</h4>
+
+<p><strong>primaryRChromaticity_x</strong> a 0.16 fixed-point Red X chromaticity coordinate as
+defined by CIE 1931</p>
+
+<p><strong>primaryRChromaticity_y</strong> is a 0.16 fixed-point Red Y chromaticity coordinate
+as defined by CIE 1931</p>
+
+<p><strong>primaryGChromaticity_x</strong> is a 0.16 fixed-point Green X chromaticity
+coordinate as defined by CIE 1931</p>
+
+<p><strong>primaryGChromaticity_y</strong> is a 0.16 fixed-point Green Y chromaticity
+coordinate as defined by CIE 1931</p>
+
+<p><strong>primaryBChromaticity_x</strong> is a 0.16 fixed-point Blue X chromaticity
+coordinate as defined by CIE 1931</p>
+
+<p><strong>primaryBChromaticity_y</strong> is a 0.16 fixed-point Blue Y chromaticity
+coordinate as defined by CIE 1931</p>
+
+<p><strong>whitePointChromaticity_x</strong> is a 0.16 fixed-point White X chromaticity
+coordinate as defined by CIE 1931</p>
+
+<p><strong>whitePointChromaticity_y</strong> is a 0.16 fixed-point White Y chromaticity
+coordinate as defined by CIE 1931</p>
+
+<p><strong>luminanceMax</strong> is a 24.8 fixed point Maximum luminance, represented in
+candelas per square meter (cd/m²)</p>
+
+<p><strong>luminanceMin</strong> is a 18.14 fixed point Minimum luminance, represented in
+candelas per square meter (cd/m²)</p>
+
+<h3 id="content-light-level-box">Content Light Level Box</h3>
+
+<p>This box contains content light level information.</p>
+
+<h4 id="definition-3">Definition</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Box Type</td>
+      <td>‘CoLL’</td>
+    </tr>
+    <tr>
+      <td>Container</td>
+      <td>Visual Sample Entry Box (‘vpxx’)</td>
+    </tr>
+    <tr>
+      <td>Mandatory</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Quantity</td>
+      <td>Exactly one</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The ‘coll’ box is used to provide the Maximum Content Light Level (maxCLL) and
+Maximum Frame-Average Light Level (maxFALL), calculated as specified in
+CEA-861.3, Appendix A. These values are coded as unsigned 16-bit integers. The
+units for these fields are cd/m2 when the brightest pixel in the entire video
+stream has the chromaticity of the white point of the encoding system used to
+represent the video stream.</p>
+
+<h4 id="syntax-2">Syntax</h4>
+
+<pre><code>class ContentLightLevelBox extends Fullbox('CoLL', 0, 0) {
+    uint16 maxCLL;
+    uint16 maxFALL;
+}
+</code></pre>
+
+<h4 id="semantics-3">Semantics</h4>
+
+<p><strong>maxCLL</strong> is a 16-bit integer that specifies the Maximum Content Light Level
+as specified in CEA-861.3, Appendix A.</p>
+
+<p><strong>maxFALL</strong> is a 16-bit integer that specifies the Maximum Frame-Average Light
+Level as specified in CEA-861.3, Appendix A.</p>
+
+<h2 id="common-encryption">Common Encryption</h2>
+
+<p>This section specifies how to signal Common Encryption for VP video streams,
+as well as VP sample partition into clear and encrypted subsamples.</p>
+
+<h3 id="scheme-info-box-sinf">Scheme Info Box (sinf)</h3>
+
+<p>If the VP9 data is encrypted, the Protection Scheme Info box (‘sinf’) shall be
+present, and shall contain a Scheme Type (‘schm’) box. The scheme_type field
+of the ‘schm’ box shall be ‘cenc’, indicating that AES-CTR encryption is used
+when samples are encrypted.</p>
+
+<h3 id="sample-encryption">Sample Encryption</h3>
+
+<p>VP8/9 samples packaged using this specification use sub-sample encryption as
+specified in section 10.6 of “ISO/IEC 23001-7 Part 7: Common encryption in ISO
+base media file format files”. The subsample encryption table may be
+implemented using the ‘senc’ box described in section 8.1 of “ISO/IEC 23001-7
+Part 7” or the ‘saio’ and ‘saiz’ boxes described in section 8.7 of “14496-12”.</p>
+
+<p>When encrypting VP9 video frames, the uncompressed header must be unencrypted.
+A subsample encryption (SENC) map must be used to identify the clear and
+encrypted bytes of each video sample. This is illustrated in figure 1.</p>
+
+<p>When encrypting superframes, the uncompressed headers of the displayed frame,
+the uncompressed headers for all ALTREF frames, and the superframe header must
+be clear. The encrypted bytes of each frame within the superframe must be
+block aligned so that the counter state can be computed for each frame within
+the superframe. Block alignment is achieved by adjusting the size of the
+unencrypted bytes that precede the encrypted bytes for that frame.</p>
+
+<p><img alt="Figure #3" src="../images/vp9-encryption-flow.png" style="margin: 3em auto 1em auto; display: block;" /></p>
+<p class="caption">Figure 3: Sample-based VP9 encryption with clear uncompressed header</p>
+
+<h2 id="dash-application">DASH Application</h2>
+
+<p>DASH and other applications require defined values for the “codecs” parameter
+specified in RFC-6381 for ISO Media tracks. The codecs string for VP is as
+follows:</p>
+
+<pre><code>&lt;sample entry 4CC&gt;.&lt;profile&gt;.&lt;level&gt;.&lt;bitDepth&gt;.&lt;chromaSubsampling&gt;.
+&lt;colourPrimaries&gt;.&lt;transferCharacteristics&gt;.&lt;matrixCoefficients&gt;.
+&lt;videoFullRangeFlag&gt;
+</code></pre>
+
+<p>Numbers are expressed as double-digit decimals.</p>
+
+<p>The <strong>level</strong> parameter is encoded as floating point number (x.y) with the
+period omitted. Eg. Level 1 is encoded as “10”, level 1.2 is encoded as “12”.
+Valid values for <strong>level</strong> may be found on the Webm Project site.<sup id="fnref:2"><a href="#fn:2" class="footnote">2</a></sup></p>
+
+<p>For example, <code>codecs="vp09.02.10.10.01.09.16.09.01"</code> represents VP9 profile 2,
+level 1, 10 bit YUV content with 4:2:0 chroma subsampling, ITU-R BT.2020
+primaries, ST 2084 EOTF, ITU-R BT.2020 non-constant luminance color matrix,
+and full range chroma/luma encoding.</p>
+
+<h3 id="mandatory-fields">Mandatory Fields</h3>
+
+<p><strong>sample entry 4CC</strong>, <strong>profile</strong>, <strong>level</strong>, and <strong>bitDepth</strong> are all
+mandatory fields. If any of these fields are unspecified or not within their
+allowed range, the device shall treat it as an error.</p>
+
+<h3 id="optional-fields">Optional Fields</h3>
+
+<p><strong>colourPrimaries</strong>, <strong>transferCharacteristics</strong>, <strong>matrixCoefficients</strong>,
+<strong>videoFullRangeFlag</strong>, and <strong>chromaSubsampling</strong> are all optional fields.
+If any of these fields are not specified then the User Agent must use the
+values listed in the table below as defaults when deciding if the decoder can
+decode the data.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">Field</th>
+      <th style="text-align: center">Default Value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center"><strong>chromaSubsampling</strong></td>
+      <td style="text-align: center">1 (4:2:0 collocated with luma (0,0))</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>colourPrimaries</strong></td>
+      <td style="text-align: center">1 (ITU-R BT.709)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>transferCharacteristics</strong></td>
+      <td style="text-align: center">1 (ITU-R BT.709)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>matrixCoefficients</strong></td>
+      <td style="text-align: center">1 (ITU-R BT.709)</td>
+    </tr>
+    <tr>
+      <td style="text-align: center"><strong>videoFullRangeFlag</strong></td>
+      <td style="text-align: center">0 (legal range)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The string <code>codecs="vp09.01.41.08"</code> in this case would represent VP9 profile
+1; level 4.1; 8-bit YUV content with 4:2:0 chroma subsampling; ITU-R BT.709
+color primaries, tranfer function, and matrix coefficients; and luma/chroma
+encoded in the “legal” range.</p>
+
+<hr />
+
+<div class="footnotes">
+  <ol>
+    <li id="fn:1">
+      <p>A model for carriage of VP8 ALTREF frames may be considered for a future version of this specification.&nbsp;<a href="#fnref:1" class="reversefootnote">&#8617;</a></p>
+    </li>
+    <li id="fn:2">
+      <p><a href="https://www.webmproject.org/vp9/levels/">VP9 Levels</a>&nbsp;<a href="#fnref:2" class="reversefootnote">&#8617;</a></p>
+    </li>
+  </ol>
+</div>
+
+</body>
+
+</html>
