@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-## Requires kramdown and wkhtmltopdf
+## Requires kramdown and athenapdf
+
 infile='VPCodecISOMediaFileFormatBinding.md'
 outfile='vp-codec-iso-media-file-format-binding-latest'
 
@@ -15,6 +16,13 @@ printf "\nHTML finished.\n\n"
 
 printf "\nConverting HTML to PDF ...\n\n"
 
-wkhtmltopdf ${outfile}.html ${outfile}.pdf
+## athenapdf can't handle filesystem paths
+cp -r ../images .
+
+docker run --security-opt seccomp=unconfined \
+  --rm -v $(pwd):/converted/ arachnysdocker/athenapdf athenapdf --no-cache \
+  ${outfile}.html ${outfile}.pdf
+
+rm -rf images
 
 printf "\nPDF finished.\n\n"

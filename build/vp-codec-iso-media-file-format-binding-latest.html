@@ -30,7 +30,7 @@
   }
   table {
     border-collapse: collapse;
-    margin: 0 auto;
+    min-width: 40%;
   }
   th, td {
     border: 1px solid #999;
@@ -451,7 +451,7 @@ Only the values in the following table are specified. If matrixCoefficients is
     </tr>
     <tr>
       <td style="text-align: center">1</td>
-      <td style="text-align: center">4:2:0 collocated with luma (0,0)</td>
+      <td style="text-align: center">4:2:0 colocated with luma (0,0)</td>
     </tr>
     <tr>
       <td style="text-align: center">2</td>
@@ -468,11 +468,11 @@ Only the values in the following table are specified. If matrixCoefficients is
   </tbody>
 </table>
 
-<p><img alt="Figure #1" src="../images/image00.png" style="margin: 3em auto 1em auto; display: block;" class="" /></p>
-<p class="caption">Figure 1: 4:2:0 Subsampling with vertical chroma samples</p>
+<p><img alt="Figure #1" src="../images/420-vertical-chroma.png" style="margin: 3em auto 1em auto; display: block;" /></p>
+<p style="text-align: center;">Figure 1: 4:2:0 Subsampling with vertical chroma samples</p>
 
-<p><img alt="Figure #2" src="../images/image01.png" style="margin: 3em auto 1em auto; display: block;" /></p>
-<p class="caption">Figure 2: 4:2:0 chroma subsampling collocated with (0,0) luma</p>
+<p><img alt="Figure #2" src="../images/420-chroma-colocated.png" style="margin: 3em auto 1em auto; display: block;" /></p>
+<p style="text-align: center;">Figure 2: 4:2:0 chroma subsampling colocated with (0,0) luma</p>
 
 <p><strong>videoFullRangeFlag</strong> indicates the black level and range of the luma and
 chroma signals. 0 = legal range (e.g. 16-235 for 8 bit sample depth) 1 = full
@@ -722,7 +722,7 @@ decode the data.</p>
   <tbody>
     <tr>
       <td style="text-align: center"><strong>chromaSubsampling</strong></td>
-      <td style="text-align: center">1 (4:2:0 collocated with luma (0,0))</td>
+      <td style="text-align: center">1 (4:2:0 colocated with luma (0,0))</td>
     </tr>
     <tr>
       <td style="text-align: center"><strong>colourPrimaries</strong></td>
