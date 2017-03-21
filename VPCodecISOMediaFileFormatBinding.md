@@ -9,7 +9,7 @@ v1.0 2017-03-20
 
 _Frank Galligan, Google  
 Kilroy Hughes, Microsoft  
-Thomas Inskip, Google  
+Thom&aacute;s Inskip, Google  
 David Ronca, Netflix_
 {:.authors }
 
@@ -21,7 +21,7 @@ Introduction
 
 This document specifies a general ISO Base Media track and sample format for
 video encoded with Video Partition structured video codecs ("VP"), such as
-MPEG VCB (MPEG-4 Part 31), VP8, VP9, etc.
+MPEG VCB (MPEG-4 Part 31), VP8, VP9, and others.
 
 
 * toc
@@ -47,7 +47,7 @@ Normative References
 Data Types and Fields
 ---------------------
 
-Fixed-point numbers are signed or unsigned values resulting from dividing an
+Fixed-point numbers are signed or unsigned values that result from dividing an
 integer by an appropriate power of 2. For example, a 0.16 fixed-point number
 is formed by dividing a 16-bit integer by 2^16.
 
@@ -56,7 +56,8 @@ Basic Encapsulation Scheme
 --------------------------
 
 This section describes the basic data structures used to signal encapsulation
-of VP encoded video in ISO-BMFF containers.
+of VP-encoded video in ISO-BMFF containers.
+
 
 ### VP Codec Sample Entry Box
 
@@ -77,8 +78,8 @@ VP elementary streams.
 The 'vpxx' Sample Entry Box specifies the coding of Video Partition Codec
 samples, and contains a 'vpcC' box that contains decoding and display
 configuration information. 'vpxx' indicates the generic class used to
-generate a box instance identified by the 4CC of the specific codec used.
-The 4CC codes currently defined by this spec are 'vp08', 'vp09', 'vp10'.
+generate a box instance, identified by the 4CC of the specific codec used.
+The 4CC codes currently defined by this spec are 'vp08', 'vp09', and 'vp10'.
 
 
 #### Syntax
@@ -100,13 +101,13 @@ class VP10SampleEntry extends VisualSampleEntry('vp10') {
 
 #### Semantics
 
-**compressorname** is a name, for informative purposes. It is formatted in a
-fixed 32-byte field, with the first byte set to the number of bytes to be
-displayed, followed by that number of bytes of displayable data, and then
-padding to complete 32 bytes total (including the size byte). The field may
-be set to 0. The value "\012VPC Coding" is recommended; the first byte is a
-count of the remaining bytes, here represented by \012, which (being octal
-12) is 10 (decimal), the number of bytes in the rest of the string
+**compressorname** is an informative name. It is formatted in a fixed 32-byte
+field, with the first byte set to the number of bytes to be displayed,
+followed by that number of bytes of displayable data, followed by padding to
+complete 32 bytes total (including the size byte). The field may be set to 0.
+The value "\012VPC Coding" is recommended; the first byte is a count of the
+remaining bytes, here represented by \012, which (being octal
+12) is decimal 10, the number of bytes in the rest of the string
 
 **config** is defined in the following section.
 
@@ -127,7 +128,7 @@ count of the remaining bytes, here represented by \012, which (being octal
 
 The VP Codec Configuration Box is contained in every VP Codec Sample Entry
 Box. It exposes the general video parameters in standard fields, useful for
-track selection and display; and it contains decoder initialization
+track selection and display. It also contains decoder initialization
 information specific to the codec and sample format indicated by the 4CC code
 of the sample entry box that contains it. All parameters must be valid for
 every sample that references the sample entry, and equal the parameter value
@@ -159,8 +160,9 @@ aligned (8) class VPCodecConfigurationRecord {
 #### Semantics
 
 **profile** is an integer that specifies the VP codec profile. The value of
-profile must be valid for all samples that reference this sample entry, i.e.
-profile SHALL be equal or greater than the profile used to encode the sample.
+profile must be valid for all samples that reference this sample entry, that
+is, profile SHALL be equal to or greater than the profile used to encode the
+sample.
 
 **level** is an integer that specifies a VP codec level all samples conform
 to.
@@ -183,10 +185,10 @@ to.
 | 62    | Level 6.2                   |
 
 **bitDepth** is an integer that specifies the bit depth of the luma and color
-components. Valid values are 8, 10, 12.
+components. Valid values are 8, 10, and 12.
 
 **chromaSubsampling** is an integer that specifies the chroma subsampling.
-Only the values in the following table are specified. If matrixCoefficients is
+Only the values in the following table are allowed. If `matrixCoefficients` is
 0 (RGB), then chroma subsampling must be 3 (4:4:4).
 
 
@@ -207,8 +209,8 @@ Only the values in the following table are specified. If matrixCoefficients is
 
 
 **videoFullRangeFlag** indicates the black level and range of the luma and
-chroma signals. 0 = legal range (e.g. 16-235 for 8 bit sample depth) 1 = full
-range (e.g. 0-255 for 8 bit sample depth).
+chroma signals. 0 = legal range (e.g. 16-235 for 8 bit sample depth); 1 = full
+range (e.g. 0-255 for 8-bit sample depth).
 
 **colourPrimaries** is an integer that is defined by the "Colour primaries"
 section of ISO/IEC 23001-8:2016.
@@ -219,10 +221,10 @@ characteristics" section of ISO/IEC 23001-8:2016.
 **matrixCoefficients** is an integer that is defined by the "Matrix
 coefficients" section of ISO/IEC 23001-8:2016.
 
-**codecIntializationDataSize** For VP8 and VP9 this field must be 0.
+**codecIntializationDataSize** must be 0 for VP8 and VP9.
 
-**codecIntializationData** binary codec initialization data. Not used for VP8
-**and VP9.
+**codecIntializationData** is not used for VP8 and VP9 . Intended for binary
+codec initialization data.
 
 
 Video Samples
@@ -242,6 +244,7 @@ Carriage of HDR Metadata
 ------------------------
 
 This section specifies a model for carrying VP codec HDR metadata.
+
 
 ### SMPTE-2086 Mastering Display Metadata Box
 
@@ -276,8 +279,8 @@ class SMPTE2086MasteringDisplayMetadataBox extends Fullbox('SmDm', 0, 0) {
 
 #### Semantics
 
-**primaryRChromaticity_x** a 0.16 fixed-point Red X chromaticity coordinate as
-defined by CIE 1931
+**primaryRChromaticity_x** is a 0.16 fixed-point Red X chromaticity coordinate
+as defined by CIE 1931
 
 **primaryRChromaticity_y** is a 0.16 fixed-point Red Y chromaticity coordinate
 as defined by CIE 1931
@@ -365,20 +368,21 @@ when samples are encrypted.
 
 ### Sample Encryption
 
-VP8/9 samples packaged using this specification use sub-sample encryption as
-specified in section 10.6 of "ISO/IEC 23001-7 Part 7: Common encryption in ISO
-base media file format files". The subsample encryption table may be
-implemented using the 'senc' box described in section 8.1 of "ISO/IEC 23001-7
-Part 7" or the 'saio' and 'saiz' boxes described in section 8.7 of "14496-12".
+VP8 and VP9 samples packaged using this specification use sub-sample
+encryption, as specified in section 10.6 of "ISO/IEC 23001-7 Part 7: Common
+encryption in ISO base media file format files". The subsample encryption
+table may be implemented using the 'senc' box described in section 8.1 of
+"ISO/IEC 23001-7 Part 7" or the 'saio' and 'saiz' boxes described in section
+8.7 of "14496-12".
 
 When encrypting VP9 video frames, the uncompressed header must be unencrypted.
 A subsample encryption (SENC) map must be used to identify the clear and
-encrypted bytes of each video sample. This is illustrated in figure 1.
+encrypted bytes of each video sample. This is illustrated in Figure #1.
 
 When encrypting superframes, the uncompressed headers of the displayed frame,
 the uncompressed headers for all ALTREF frames, and the superframe header must
 be clear. The encrypted bytes of each frame within the superframe must be
-block aligned so that the counter state can be computed for each frame within
+block-aligned so that the counter state can be computed for each frame within
 the superframe. Block alignment is achieved by adjusting the size of the
 unencrypted bytes that precede the encrypted bytes for that frame.
 
@@ -402,14 +406,15 @@ follows:
 
 Numbers are expressed as double-digit decimals.
 
-The **level** parameter is encoded as floating point number (x.y) with the
-period omitted. Eg. Level 1 is encoded as "10", level 1.2 is encoded as "12".
-Valid values for **level** may be found on the Webm Project site.[^2]
+The **level** parameter is encoded as a floating point number (x.y) with the
+decimal point omitted. For example, Level 1 is encoded as "10" and level 1.2
+is encoded as "12". Valid values for **level** may be found on the Webm
+Project site.[^2]
 
 For example, `codecs="vp09.02.10.10.01.09.16.09.01"` represents VP9 profile 2,
-level 1, 10 bit YUV content with 4:2:0 chroma subsampling, ITU-R BT.2020
+level 1, 10-bit YUV content, with 4:2:0 chroma subsampling, ITU-R BT.2020
 primaries, ST 2084 EOTF, ITU-R BT.2020 non-constant luminance color matrix,
-and full range chroma/luma encoding.
+and full-range chroma/luma encoding.
 
 
 ### Mandatory Fields
@@ -424,8 +429,8 @@ allowed range, the device shall treat it as an error.
 **colourPrimaries**, **transferCharacteristics**, **matrixCoefficients**,
 **videoFullRangeFlag**, and **chromaSubsampling** are all optional fields.
 If any of these fields are not specified then the User Agent must use the
-values listed in the table below as defaults when deciding if the decoder can
-decode the data.
+values listed in the table below as defaults when deciding if the decoder is
+able to decode the data.
 
 
 | Field | Default Value                                              |
@@ -436,9 +441,10 @@ decode the data.
 | **matrixCoefficients**      | 1 (ITU-R BT.709)                     |
 | **videoFullRangeFlag**      | 0 (legal range)                      |
 
+
 The string `codecs="vp09.01.41.08"` in this case would represent VP9 profile
-1; level 4.1; 8-bit YUV content with 4:2:0 chroma subsampling; ITU-R BT.709
-color primaries, tranfer function, and matrix coefficients; and luma/chroma
+1, level 4.1, 8-bit YUV content with 4:2:0 chroma subsampling, ITU-R BT.709
+color primaries, tranfer function and matrix coefficients, and luma/chroma
 encoded in the "legal" range.
 
 
