@@ -104,8 +104,8 @@ class VP10SampleEntry extends VisualSampleEntry('vp10') {
 **compressorname** is an informative name. It is formatted in a fixed 32-byte
 field, with the first byte set to the number of bytes to be displayed,
 followed by that number of bytes of displayable data, followed by padding to
-complete 32 bytes total (including the size byte). The field may be set to 0.
-The value "\012VPC Coding" is recommended; the first byte is a count of the
+complete 32 bytes total (including the size byte). The field MAY be set to 0.
+The value "\012VPC Coding" is RECOMMENDED; the first byte is a count of the
 remaining bytes, here represented by \012, which (being octal
 12) is decimal 10, the number of bytes in the rest of the string
 
@@ -160,7 +160,7 @@ aligned (8) class VPCodecConfigurationRecord {
 #### Semantics
 
 **profile** is an integer that specifies the VP codec profile. The value of
-profile must be valid for all samples that reference this sample entry, that
+profile MUST be valid for all samples that reference this sample entry, that
 is, profile SHALL be equal to or greater than the profile used to encode the
 sample.
 
@@ -189,7 +189,7 @@ components. Valid values are 8, 10, and 12.
 
 **chromaSubsampling** is an integer that specifies the chroma subsampling.
 Only the values in the following table are allowed. If `matrixCoefficients` is
-0 (RGB), then chroma subsampling must be 3 (4:4:4).
+0 (RGB), then chroma subsampling MUST be 3 (4:4:4).
 
 
 | Value | Subsampling|
@@ -221,7 +221,7 @@ characteristics" section of ISO/IEC 23001-8:2016.
 **matrixCoefficients** is an integer that is defined by the "Matrix
 coefficients" section of ISO/IEC 23001-8:2016.
 
-**codecIntializationDataSize** must be 0 for VP8 and VP9.
+**codecIntializationDataSize** MUST be 0 for VP8 and VP9.
 
 **codecIntializationData** is not used for VP8 and VP9 . Intended for binary
 codec initialization data.
@@ -233,7 +233,7 @@ Video Samples
 Video sample storage in the generic binding uses a simple mapping to frames
 defined in the codec specification. The height and width in the Visual Sample
 Entry are specified in square pixels. If the video pixels are not square, then
-a 'pasp' box must be included. ALTREF frames must be part of a superframe
+a 'pasp' box MUST be included. ALTREF frames MUST be part of a superframe
 structure.
 
 Note: VP8 does not support superframes, and so it is not possible to carry VP8
@@ -360,9 +360,9 @@ as well as VP sample partition into clear and encrypted subsamples.
 
 ### Scheme Info Box (sinf)
 
-If the VP9 data is encrypted, the Protection Scheme Info box ('sinf') shall be
-present, and shall contain a Scheme Type ('schm') box. The scheme\_type field
-of the 'schm' box shall be 'cenc', indicating that AES-CTR encryption is used
+If the VP9 data is encrypted, the Protection Scheme Info box ('sinf') SHALL be
+present, and SHALL contain a Scheme Type ('schm') box. The scheme\_type field
+of the 'schm' box SHALL be 'cenc', indicating that AES-CTR encryption is used
 when samples are encrypted.
 
 
@@ -371,17 +371,17 @@ when samples are encrypted.
 VP8 and VP9 samples packaged using this specification use sub-sample
 encryption, as specified in section 10.6 of "ISO/IEC 23001-7 Part 7: Common
 encryption in ISO base media file format files". The subsample encryption
-table may be implemented using the 'senc' box described in section 8.1 of
+table MAY be implemented using the 'senc' box described in section 8.1 of
 "ISO/IEC 23001-7 Part 7" or the 'saio' and 'saiz' boxes described in section
 8.7 of "14496-12".
 
-When encrypting VP9 video frames, the uncompressed header must be unencrypted.
-A subsample encryption (SENC) map must be used to identify the clear and
+When encrypting VP9 video frames, the uncompressed header MUST be unencrypted.
+A subsample encryption (SENC) map MUST be used to identify the clear and
 encrypted bytes of each video sample. This is illustrated in Figure #1.
 
 When encrypting superframes, the uncompressed headers of the displayed frame,
-the uncompressed headers for all ALTREF frames, and the superframe header must
-be clear. The encrypted bytes of each frame within the superframe must be
+the uncompressed headers for all ALTREF frames, and the superframe header MUST
+be clear. The encrypted bytes of each frame within the superframe MUST be
 block-aligned so that the counter state can be computed for each frame within
 the superframe. Block alignment is achieved by adjusting the size of the
 unencrypted bytes that precede the encrypted bytes for that frame.
@@ -408,7 +408,7 @@ Numbers are expressed as double-digit decimals.
 
 The **level** parameter is encoded as a floating point number (x.y) with the
 decimal point omitted. For example, Level 1 is encoded as "10" and level 1.2
-is encoded as "12". Valid values for **level** may be found on the Webm
+is encoded as "12". Valid values for **level** can be found on the Webm
 Project site.[^2]
 
 For example, `codecs="vp09.02.10.10.01.09.16.09.01"` represents VP9 profile 2,
@@ -421,14 +421,14 @@ and full-range chroma/luma encoding.
 
 **sample entry 4CC**, **profile**, **level**, and **bitDepth** are all
 mandatory fields. If any of these fields are unspecified or not within their
-allowed range, the device shall treat it as an error.
+allowed range, the device SHALL treat it as an error.
 
 
 ### Optional Fields
 
 **colourPrimaries**, **transferCharacteristics**, **matrixCoefficients**,
-**videoFullRangeFlag**, and **chromaSubsampling** are all optional fields.
-If any of these fields are not specified then the User Agent must use the
+**videoFullRangeFlag**, and **chromaSubsampling** are all OPTIONAL fields.
+If any of these fields are not specified then the User Agent MUST use the
 values listed in the table below as defaults when deciding if the decoder is
 able to decode the data.
 
