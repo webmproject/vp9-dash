@@ -233,11 +233,11 @@ Video Samples
 Video sample storage in the generic binding uses a simple mapping to frames
 defined in the codec specification. The height and width in the Visual Sample
 Entry are specified in square pixels. If the video pixels are not square, then
-a 'pasp' box MUST be included. ALTREF frames MUST be part of a superframe
-structure.
+a 'pasp' box MUST be included. Altref (alternate reference) frames MUST be
+part of a superframe structure.
 
 Note: VP8 does not support superframes, and so it is not possible to carry VP8
-using this specification if the VP8 stream includes ALTREF frames.[^1]
+using this specification if the VP8 stream includes altref frames.[^1]
 
 
 Carriage of HDR Metadata
@@ -380,7 +380,7 @@ A subsample encryption (SENC) map MUST be used to identify the clear and
 encrypted bytes of each video sample. This is illustrated in Figure #1.
 
 When encrypting superframes, the uncompressed headers of the displayed frame,
-the uncompressed headers for all ALTREF frames, and the superframe header MUST
+the uncompressed headers for all altref frames, and the superframe header MUST
 be clear. The encrypted bytes of each frame within the superframe MUST be
 block-aligned so that the counter state can be computed for each frame within
 the superframe. Block alignment is achieved by adjusting the size of the
@@ -450,6 +450,6 @@ encoded in the "legal" range.
 
 * * *
 
-[^1]: A model for carriage of VP8 ALTREF frames may be considered for a future version of this specification.
+[^1]: A model for carriage of VP8 altref frames may be considered for a future version of this specification.
 
 [^2]: [VP9 Levels](https://www.webmproject.org/vp9/levels/)
