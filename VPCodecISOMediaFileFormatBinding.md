@@ -438,8 +438,8 @@ device is able to decode and potentially render the video.
 | **videoFullRangeFlag**      | 0 (legal range)                      |
 
 
-The string `codecs="vp09.01.41.08"` in this case would represent VP9 profile
-1, level 4.1, 8-bit YUV content with 4:2:0 chroma subsampling, ITU-R BT.709
+The string `codecs="vp09.00.41.08"` in this case would represent VP9 profile
+0, level 4.1, 8-bit YUV content with 4:2:0 chroma subsampling, ITU-R BT.709
 color primaries, tranfer function and matrix coefficients, and luma/chroma
 encoded in the "legal" range.
 
