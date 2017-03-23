@@ -31,6 +31,8 @@ MPEG VCB (MPEG-4 Part 31), VP8, VP9, and others.
 Normative References
 --------------------
 
+  * [VP9 Bitstream and Decoding Process Specification](https://storage.googleapis.com/downloads.webmproject.org/docs/vp9/vp9-bitstream-specification-v0.6-20160331-draft.pdf)
+
   * ISO/IEC 14496‐12, Information technology -- Coding of audio-visual objects
     -- Part 12: ISO base media file format
 
@@ -40,8 +42,6 @@ Normative References
 
   * SMPTE ST 2086:2014, Mastering Display Color Volume Metadata Supporting
     High Luminance and Wide Color Gamut Images
-
-  * VP9 Bitstream and Decoding Process
 
 
 Data Types and Fields
@@ -165,7 +165,8 @@ is, profile SHALL be equal to or greater than the profile used to encode the
 sample.
 
 **level** is an integer that specifies a VP codec level all samples conform
-to.
+to the following table. For a description of the various levels, please refer
+to the VP9 Bitstream Specification [^1].
 
 | Value | Level                       |
 |:-----:|:---------------------------:|
@@ -237,7 +238,7 @@ a 'pasp' box MUST be included. ALTREF frames MUST be part of a superframe
 structure.
 
 Note: VP8 does not support superframes, and so it is not possible to carry VP8
-using this specification if the VP8 stream includes ALTREF frames.[^1]
+using this specification if the VP8 stream includes ALTREF frames [^2].
 
 
 Carriage of HDR Metadata
@@ -391,12 +392,12 @@ unencrypted bytes that precede the encrypted bytes for that frame.
 <p  class="caption">Figure 3: Sample-based VP9 encryption with clear uncompressed header</p>
 
 
-DASH Application
-----------------
+Codecs Parameter String
+-----------------------
 
-DASH and other applications require defined values for the "codecs" parameter
-specified in RFC-6381 for ISO Media tracks. The codecs string for VP is as
-follows:
+DASH and other applications require defined values for the 'Codecs' parameter
+specified in RFC-6381 for ISO Media tracks. The codecs parameter string for
+the VP codec family is as follows:
 
 ~~~~~
 <sample entry 4CC>.<profile>.<level>.<bitDepth>.<chromaSubsampling>.
@@ -404,33 +405,28 @@ follows:
 <videoFullRangeFlag>
 ~~~~~
 
-Numbers are expressed as double-digit decimals.
-
-The **level** parameter is encoded as a floating point number (x.y) with the
-decimal point omitted. For example, Level 1 is encoded as "10" and level 1.2
-is encoded as "12". Valid values for **level** can be found on the Webm
-Project site.[^2]
+All parameter values are expressed as double-digit decimals. Their semantics
+are explained in the VPCodecConfigurationBox Semantics section above.
 
 For example, `codecs="vp09.02.10.10.01.09.16.09.01"` represents VP9 profile 2,
 level 1, 10-bit YUV content, with 4:2:0 chroma subsampling, ITU-R BT.2020
 primaries, ST 2084 EOTF, ITU-R BT.2020 non-constant luminance color matrix,
 and full-range chroma/luma encoding.
 
-
 ### Mandatory Fields
 
 **sample entry 4CC**, **profile**, **level**, and **bitDepth** are all
-mandatory fields. If any of these fields are unspecified or not within their
-allowed range, the device SHALL treat it as an error.
+mandatory fields. If any of these fields are empty, or not within their
+allowed range, the processing device SHALL treat it as an error.
 
 
 ### Optional Fields
 
 **colourPrimaries**, **transferCharacteristics**, **matrixCoefficients**,
-**videoFullRangeFlag**, and **chromaSubsampling** are all OPTIONAL fields.
-If any of these fields are not specified then the User Agent MUST use the
-values listed in the table below as defaults when deciding if the decoder is
-able to decode the data.
+**videoFullRangeFlag**, and **chromaSubsampling** are OPTIONAL, mutually
+inclusive (all or none) fields. If not specified then the processing device
+MUST use the values listed in the table below as defaults when deciding if the
+device is able to decode and potentially render the video.
 
 
 | Field | Default Value                                              |
@@ -450,6 +446,6 @@ encoded in the "legal" range.
 
 * * *
 
-[^1]: A model for carriage of VP8 ALTREF frames may be considered for a future version of this specification.
+[^1]: [VP9 Bitstream and Decoding Process Specification](https://storage.googleapis.com/downloads.webmproject.org/docs/vp9/vp9-bitstream-specification-v0.6-20160331-draft.pdf)
 
-[^2]: [VP9 Levels](https://www.webmproject.org/vp9/levels/)
+[^2]: A model for carriage of VP8 ALTREF frames may be considered for a future version of this specification.
