@@ -161,8 +161,7 @@ aligned (8) class VPCodecConfigurationRecord {
 
 **profile** is an integer that specifies the VP codec profile. The value of
 profile MUST be valid for all samples that reference this sample entry, that
-is, profile SHALL be equal to or greater than the profile used to encode the
-sample.
+is, profile SHALL be equal to the profile used to encode the sample.
 
 **level** is an integer that specifies a VP codec level all samples conform
 to the following table. For a description of the various levels, please refer
