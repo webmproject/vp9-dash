@@ -377,7 +377,7 @@ table MAY be implemented using the 'senc' box described in section 8.1 of
 
 When encrypting VP9 video frames, the uncompressed header MUST be unencrypted.
 A subsample encryption (SENC) map MUST be used to identify the clear and
-encrypted bytes of each video sample. This is illustrated in Figure #1.
+encrypted bytes of each video sample. This is illustrated in Figure #3.
 
 When encrypting superframes, the uncompressed headers of the displayed frame,
 the uncompressed headers for all altref frames, and the superframe header MUST
