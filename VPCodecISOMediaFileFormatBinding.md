@@ -101,6 +101,11 @@ class VP10SampleEntry extends VisualSampleEntry('vp10') {
 
 #### Semantics
 
+**width, height, horzresolution, vertresolution** SHALL be encoded as an
+upper bound of the video in the container. VP9 supports on-the-fly decoding
+of dynamic video resolutions, so these fields SHALL contain the highest values
+of any portion of the video stream.
+
 **compressorname** is an informative name. It is formatted in a fixed 32-byte
 field, with the first byte set to the number of bytes to be displayed,
 followed by that number of bytes of displayable data, followed by padding to
