@@ -1,31 +1,21 @@
 
 VP Codec ISO Media File Format Binding
 ======================================
-{:.no_toc .title }
 
-
-v1.0 2017-03-20
-{:.version }
+v1.0 2017-03-30
 
 _Frank Galligan, Google  
 Kilroy Hughes, Microsoft  
 Thom&aacute;s Inskip, Google  
 David Ronca, Netflix_
-{:.authors }
-
 
 
 Introduction
 ------------
-{:.no_toc}
 
 This document specifies a general ISO Base Media track and sample format for
 video encoded with Video Partition structured video codecs ("VP"), such as
 MPEG VCB (MPEG-4 Part 31), VP8, VP9, and others.
-
-
-* toc
-{:toc}
 
 
 Authoritative Source
