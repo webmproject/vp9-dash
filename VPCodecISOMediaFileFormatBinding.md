@@ -28,10 +28,11 @@ MPEG VCB (MPEG-4 Part 31), VP8, VP9, and others.
 {:toc}
 
 
-Authorative Source
-------------------
+Authoritative Source
+--------------------
 
-The authoritative source of this document resides in the [vp9-dash github repository](https://github.com/webmproject/vp9-dash).
+The authoritative source of this document resides in the
+[vp9-dash GitHub repository](https://github.com/webmproject/vp9-dash).
 
 
 Normative References
@@ -387,7 +388,7 @@ table MAY be implemented using the 'senc' box described in section 8.1 of
 8.7 of "14496-12".
 
 When encrypting VP9 video frames, the uncompressed header MUST be unencrypted.
-Block alignment is achieved by adjusting the size of the  unencrypted bytes
+Block alignment is achieved by adjusting the size of the unencrypted bytes
 that precede the encrypted bytes for the frame. A subsample encryption (SENC)
 map MUST be used to identify the clear and encrypted bytes of each video
 sample. This is illustrated in Figure #3.
