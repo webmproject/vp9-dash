@@ -140,7 +140,7 @@ unless otherwise noted.
 #### Syntax
 
 ~~~~~
-class VPCodecConfigurationBox extends FullBox('vpcC', version, 1){
+class VPCodecConfigurationBox extends FullBox('vpcC', version = 1, 0){
       VPCodecConfigurationRecord() vpcConfig;
 }
 
@@ -160,6 +160,9 @@ aligned (8) class VPCodecConfigurationRecord {
 
 
 #### Semantics
+
+**version** is an integer that specifies the version of this box, should be 1.
+Version 0 is deprecated and should not be used.
 
 **profile** is an integer that specifies the VP codec profile. The value of
 profile MUST be valid for all samples that reference this sample entry, that
