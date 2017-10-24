@@ -2,7 +2,7 @@
 VP Codec ISO Media File Format Binding
 ======================================
 
-v1.0 2017-03-30
+v1.1 2017-10-24
 
 _Frank Galligan, Google  
 Kilroy Hughes, Microsoft  
@@ -41,7 +41,7 @@ Normative References
     High Luminance and Wide Color Gamut Images
 
 
-Data Types and Fields
+Data Types and Fields (Informative)
 ---------------------
 
 Fixed-point numbers are signed or unsigned values that result from dividing an
@@ -49,7 +49,7 @@ integer by an appropriate power of 2. For example, a 0.16 fixed-point number
 is formed by dividing a 16-bit integer by 2^16.
 
 
-Basic Encapsulation Scheme
+Basic Encapsulation Scheme (Normative)
 --------------------------
 
 This section describes the basic data structures used to signal encapsulation
@@ -232,7 +232,7 @@ coefficients" section of ISO/IEC 23001-8:2016.
 codec initialization data.
 
 
-Video Samples
+Video Samples (Normative)
 -------------
 
 Video sample storage in the generic binding uses a simple mapping to frames
@@ -245,7 +245,7 @@ Note: VP8 does not support superframes, and so it is not possible to carry VP8
 using this specification if the VP8 stream includes altref frames.[^2]
 
 
-Carriage of HDR Metadata
+Carriage of HDR Metadata (Normative)
 ------------------------
 
 This section specifies a model for carrying VP codec HDR metadata.
@@ -356,7 +356,7 @@ as specified in CEA-861.3, Appendix A.
 Level as specified in CEA-861.3, Appendix A.
 
 
-Common Encryption
+Common Encryption (Normative)
 -----------------
 
 This section specifies how to signal Common Encryption for VP video streams,
@@ -397,7 +397,7 @@ the superframe.
 <p  class="caption">Figure 3: Sample-based VP9 encryption with clear uncompressed header</p>
 
 
-Codecs Parameter String
+Codecs Parameter String (Normative)
 -----------------------
 
 DASH and other applications require defined values for the 'Codecs' parameter
