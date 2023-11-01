@@ -2,7 +2,7 @@
 VP Codec ISO Media File Format Binding
 ======================================
 
-v1.0 2017-03-30
+v1.1 2023-11-01
 
 _Frank Galligan, Google  
 Kilroy Hughes, Microsoft  
@@ -66,7 +66,7 @@ VP elementary streams.
 
 |           |                                                  |
 | --------- | ------------------------------------------------ |
-| Box Type  | 'vp_xx_' where 'xx' is one of '08', '09' or '10' |
+| Box Type  | 'vp_xx_' where 'xx' is one of '08' or '09'       |
 | Container | Sample Description Box ('stsd')                  |
 | Mandatory | Yes, for VP codec tracks                         |
 | Quantity  | Exactly one                                      |
@@ -76,7 +76,7 @@ The 'vpxx' Sample Entry Box specifies the coding of Video Partition Codec
 samples, and contains a 'vpcC' box that contains decoding and display
 configuration information. 'vpxx' indicates the generic class used to
 generate a box instance, identified by the 4CC of the specific codec used.
-The 4CC codes currently defined by this spec are 'vp08', 'vp09', and 'vp10'.
+The 4CC codes currently defined by this spec are 'vp08' and 'vp09'.
 
 
 #### Syntax
@@ -87,10 +87,6 @@ class VP8SampleEntry extends VisualSampleEntry('vp08') {
 }
 
 class VP9SampleEntry extends VisualSampleEntry('vp09') {
-    VPCodecConfigurationBox    config;
-}
-
-class VP10SampleEntry extends VisualSampleEntry('vp10') {
     VPCodecConfigurationBox    config;
 }
 ~~~~~
@@ -445,7 +441,7 @@ device is able to decode and potentially render the video.
 
 The string `codecs="vp09.00.41.08"` in this case would represent VP9 profile
 0, level 4.1, 8-bit YUV content with 4:2:0 chroma subsampling, ITU-R BT.709
-color primaries, tranfer function and matrix coefficients, and luma/chroma
+color primaries, transfer function and matrix coefficients, and luma/chroma
 encoded in the "legal" range.
 
 
