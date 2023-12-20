@@ -186,11 +186,13 @@ to the VP9 Bitstream Specification [^1].
 | 62    | Level 6.2                   |
 
 **bitDepth** is an integer that specifies the bit depth of the luma and color
-components. Valid values are 8, 10, and 12.
+components. Valid values are 8, 10, and 12. This value may be further
+constrained by the profile.
 
 **chromaSubsampling** is an integer that specifies the chroma subsampling.
-Only the values in the following table are allowed. If `matrixCoefficients` is
-0 (RGB), then chroma subsampling MUST be 3 (4:4:4).
+Only the values in the following table are allowed. This value may be further
+constrained by the profile. If `matrixCoefficients` is 0 (RGB), then chroma
+subsampling MUST be 3 (4:4:4).
 
 
 | Value | Subsampling|
