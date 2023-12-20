@@ -164,6 +164,17 @@ Version 0 is deprecated and should not be used.
 profile MUST be valid for all samples that reference this sample entry, that
 is, profile SHALL be equal to the profile used to encode the sample.
 
+**VP9 Coding Profiles** [^1]
+
+| Profile | Color Depth  | Chroma Subsampling |
+|:-------:|:------------:|:------------------:|
+| 0       | 8 bit/sample | 4:2:0              |
+| 1       | 8 bit        | 4:2:2, 4:4:4       |
+| 2       | 10 or 12 bit | 4:2:0              |
+| 3       | 10 or 12 bit | 4:2:2, 4:4:4       |
+
+Note: VP8 only supports a profile value of 0.
+
 **level** is an integer that specifies a VP codec level all samples conform
 to the following table. For a description of the various levels, please refer
 to the VP9 Bitstream Specification [^1].
