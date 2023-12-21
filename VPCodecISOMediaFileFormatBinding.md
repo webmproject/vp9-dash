@@ -164,8 +164,6 @@ Version 0 is deprecated and should not be used.
 profile MUST be valid for all samples that reference this sample entry, that
 is, profile SHALL be equal to the profile used to encode the sample.
 
-**VP9 Coding Profiles** [^1]
-
 | Profile | Color Depth  | Chroma Subsampling |
 |:-------:|:------------:|:------------------:|
 | 0       | 8 bit/sample | 4:2:0              |
