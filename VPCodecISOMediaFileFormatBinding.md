@@ -149,8 +149,8 @@ aligned (8) class VPCodecConfigurationRecord {
     unsigned int (8)     colourPrimaries;
     unsigned int (8)     transferCharacteristics;
     unsigned int (8)     matrixCoefficients;
-    unsigned int (16)    codecIntializationDataSize;
-    unsigned int (8)[]   codecIntializationData;
+    unsigned int (16)    codecInitializationDataSize;
+    unsigned int (8)[]   codecInitializationData;
 }
 ~~~~~
 
@@ -233,9 +233,9 @@ characteristics" section of ISO/IEC 23001-8:2016.
 **matrixCoefficients** is an integer that is defined by the "Matrix
 coefficients" section of ISO/IEC 23001-8:2016.
 
-**codecIntializationDataSize** MUST be 0 for VP8 and VP9.
+**codecInitializationDataSize** MUST be 0 for VP8 and VP9.
 
-**codecIntializationData** is not used for VP8 and VP9 . Intended for binary
+**codecInitializationData** is not used for VP8 and VP9. Intended for binary
 codec initialization data.
 
 
